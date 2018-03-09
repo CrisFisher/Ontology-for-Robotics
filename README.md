@@ -1,2 +1,2 @@
 # Ontology-for-Robotics
-Robot Structure Design usin Ontologies
+Robot Structure Design using Ontologies
