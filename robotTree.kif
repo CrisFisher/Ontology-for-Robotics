@@ -1,0 +1,334 @@
+
+         (rootParentName Robot) 
+
+         (documentation Robot EnglishLanguage " An &%Agent and a  &%Device   purposed to act in the physical world in order to accomplish one or more tasks. As an &%Agent has different &%robotSkill thanks to the diverse stuctures of &%Device that form the robot. ")
+         
+         (subclass aerialRobot Robot)
+         (literalName aerialRobot SpanishLanguage "Robot aereo")
+         (documentation aerialRobot EnglishLanguage "Any robot that has an &%aerialTranslocationSystem as it's main &%translocationSystem")
+
+            (subclass copterRobot aerialRobot)
+			(documentation copterRobot EnglishLanguage "Any robot that has an &%aerialTranslocationSystem formed by at least one &%Rotor")
+            (literalName copterRobot SpanishLanguage "Robot de tipo coptero")
+               
+               (subclass helicopterRobot copterRobot)
+               (literalName helicopterRobot SpanishLanguage "Robot helicoptero")
+               (documentation helicopterRobot EnglishLanguage "Any robot that has an &%aerialTranslocationSystem formed by two different &%Rotor")
+               
+               (subclass quadroCopter copterRobot)
+               (documentation quadroCopter EnglishLanguage "Any robot that has an &%aerialTranslocationSystem formed by four different &%Rotor")  
+               (literalName quadrocopter SpanishLanguage "Robot quadrucoptero")
+               
+               (subclass multicopterRobot copterRobot)
+               (literalName multicopterRobot SpanishLanguage "Robot multicoptero")
+               (documentation multicopterRobot EnglishLanguage "Any robot that has an &%aerialTranslocationSystem formed by at leats five different &%Rotor")  
+            
+            (subclass fixedWingRobot aerialRobot)
+            (documentation fixedWingRobot EnglishLanguage "Any robot that has an &%aerialTranslocationSystem formed by &%robotWing")  
+            (literalName fixedWingRobot SpanishLanguage "Robot de ala fija")
+      		
+      		(subclass airPlaneRobot fixedWingRobot)
+      		(documentation airPlaneRobot EnglishLanguage "Any &%fixedWingRobot with an &%aerialTranslocationSystem formed by a &%Propeller")
+
+         (subclass aquaticRobot Robot)
+         	(documentation aquaticRobot EnglishLanguage "Any robot that has an &%aerialTranslocationSystem formed by at least one &%Rotor")
+            (literalName aquaticRobot SpanishLanguage "Robot aquatico")
+            
+            (subclass floatingRobot aquaticRobot)
+            (documentation floatingRobot EnglishLanguage "Any &%aquaticRobot capable to operate in the surface of the water.")
+            (literalName floatingRobot SpanishLanguage "Robot aquatico, flotante")
+               
+            (subclass aquaticGroundRobot aquaticRobot)
+            (documentation aquaticGroundRobot EnglishLanguage "Any &%aquaticRobot capable to operate in an aquatic environment, in contact with the ground.")
+            (literalName aquaticGroundRobot SpanishLanguage "Robot fondo aquatico")
+      
+               
+            (subclass divingRobot aquaticRobot)
+            (documentation divingRobot EnglishLanguage "Any &%aquaticRobot capable to operate in an aquatic environment without contact with the surface or the ground.")
+            (literalName divingRobot SpanishLanguage "Robot aquatico, nadador")
+               
+         
+         (subclass amphibiousRobot Robot)
+            (literalName amphibiousRobot SpanishLanguage "Robot anfibio")
+            (documentation amphibiousRobot EnglishLanguage "Any &%Robot capable to operate in aquatic and terrestrial environments")
+      
+
+
+      
+         (subclass groundRobot Robot)
+            (literalName groundRobot SpanishLanguage "Robot de tierra")
+             (documentation groundRobot EnglishLanguage "Any &%Robot that operate while in contact with the ground")
+
+               (subclass trackedRobot groundRobot)
+                  (literalName trackeddRobot SpanishLanguage "Robot de railes")
+                  (documentation trackedRobot EnglishLanguage "Any robot whose trajectory is limitied to a &%track in which it is located.")
+                  (forall (?rob)
+                     (=>
+                        (instance ?rob trackedRobot)
+                        (exists (?trk)
+                           (and
+                              (instance ?trk trackForVehicle)
+                              (trackedIn ?rob ?trk)
+                           )
+                        ) 
+                     )
+                  )
+      
+      
+               (subclass leggedRobot groundRobot)
+               (literalName leggeddRobot SpanishLanguage "Robot con piernas")
+               (documentation leggedRobot EnglishLanguage "Any &%Robot that has at least a &%robotLeg")
+                  (forall (?rob)
+                     (=>
+                        (instance ?rob leggedRobot)
+                        (exists(?leg ?trunk)
+                           (and
+                              (instance ?leg robotLeg)
+                              (instance ?trunk robotTrunk)
+                              (articulatedTo ?leg ?trunk)
+                              (robotPart ?trunk ?rob)
+                           
+                           )
+                        )
+                     )
+                  )
+                  (subclass bipedalRobot leggedRobot)
+                  (documentation bipedalRobot EnglishLanguage "Any &%leggedRobot that has two &%robotLeg connectedTo it's &%robotTrunk")
+                  (literalName bipedalRobot SpanishLanguage "Robot bipedo")
+                     (forall (?rob)
+                        (=>
+                           (instance ?rob bipedalRobot)
+                           (exists (?leg1 ?leg2)
+                              (and
+                                 (instance ?leg1 robotLeg)
+                                 (instance ?leg2 robotLeg)
+                                 (instance ?trunk robotTrunk)
+                                 (articulatedTo ?leg1 ?trunk)
+                                 (articulatedTo ?leg2 ?trunk)
+                                 (robotPart ?trunk ?rob)
+                                 (not 
+                                    (exists (?leg3)
+                                       (and
+                                          (instance ?leg robotLeg)
+                                          (or
+                                             (part ?leg3 ?rob)
+                                             (articulatedTo ?leg4 ?trnk)
+                                          )
+                                       )
+                                    )
+                                 )
+                              )
+                           )
+                        )
+                     )
+                     (forall (?rob)
+                        (=>
+                           (instance ?rob Robot)
+                           (exists (?trnk)
+                              (and
+                                 (instance ?trunk robotTrunk)
+                                 (robotPart ?trunk ?rob)
+                              )
+                           )
+                        )
+                     )
+
+
+                     (subclass humanoidRobot bipedalRobot)
+                     (documentation humanoidRobot EnglishLanguage "Any &%bipedalRobot that has two &%robotArm and one &%robotHead")
+                        (literalName humanoidRobot SpanishLanguage "Robot humanoide")
+                        (forall (?rob)
+                           (=>
+                              (instance ?rob humanoidRobot)
+                              (and
+                                 (exists (?arm1 ?arm2 ?trnk ?head)
+                                    (and
+                                       (instance ?arm1 robotArm)
+                                       (instance ?arm2 robotArm)
+                                       (instance ?trunk robotTrunk)
+                                       (instance ?head robotHead)
+                                       (articulatedTo ?head ?trunk)
+                                       (articulatedTo ?arm1 ?trunk)
+                                       (articulatedTo ?arm2 ?trunk)
+                                       (robotPart ?trunk ?rob)
+                                    )
+                                 )
+                              )
+                           )
+                     )
+                  (subclass quadrupedalRobot leggedRobot)
+                  (literalName quadrupedalRobot SpanishLanguage "Robot quadrupedo")
+                  (documentation quadrupedalRobot EnglishLanguage "&%leggedRobot with 4 &%robotLeg connected to it's &%robotTrunk")
+                  (forall (?rob)
+                     (=> 
+                        (instance ?rob quadrupedalRobot) 
+                        (exists (?leg1 ?leg2 ?leg3 ?leg4 ?trnk)
+                           (and
+                              (instance ?trunk robotTrunk)
+                              (instance ?leg1 robotLeg)
+                              (instance ?leg2 robotLeg)
+                              (instance ?leg3 robotLeg)
+                              (instance ?leg4 robotLeg)
+                              (robotPart ?trunk ?rob)
+                              (connectedTo ?leg1 ?trunk)
+                              (connectedTo ?leg2 ?trunk)
+                              (connectedTo ?leg3 ?trunk)
+                              (connectedTo ?leg4 ?trunk)
+                              (part ?trunk ?rob)
+                              (not 
+                                 (exists (?leg5)
+                                    (and 
+                                       (instance ?leg5 robotLeg)
+                                       (part ?leg5 ?rob)
+                                    )
+                                 )
+                              )
+                           )
+                        )
+                     )
+                  )
+                  (subclass hexapodRobot leggedRobot)
+                  (documentation hexapodRobot EnglishLanguage "&%leggedRobot with 6 &%robotLeg connected to it's &%robotTrunk")
+                     (literalName hexapodRobot SpanishLanguage "Robot hexapodo")
+
+                  (forall (?rob)
+                     (=> 
+                        (instance ?rob hexapodRobot) 
+                        (exists (?leg1 ?leg2 ?leg3 ?leg4 ?leg5 ?leg6 ?trunk)
+                           (and
+                              (instance ?trunk robotTrunk)
+                              (instance ?leg1 robotLeg)
+                              (instance ?leg2 robotLeg)
+                              (instance ?leg3 robotLeg)
+                              (instance ?leg4 robotLeg)
+                              (instance ?leg5 robotLeg)
+                              (instance ?leg6 robotLeg)
+                              (connectedTo ?leg1 ?trunk)
+                              (connectedTo ?leg2 ?trunk)
+                              (connectedTo ?leg3 ?trunk)
+                              (connectedTo ?leg4 ?trunk)
+                              (connectedTo ?leg5 ?trunk)
+                              (connectedTo ?leg6 ?trunk)
+                              (robotPart ?trunk ?rob)
+                              (not    
+                                 (exists (?leg7)
+                                    (and 
+                                       (instance ?leg7 robotLeg)
+                                       (part ?leg7 ?rob)
+                                    )
+                                 )
+                              )
+                           )
+                        )
+                     )
+                  )
+
+                  (subclass wheelBasedRobot groundRobot)
+                  	 (documentation wheelBasedRobot EnglishLanguage "Any robot with a &%translocationSystem  that involves at least one &%Wheel")
+                     (literalName wheelBasedRobot SpanishLanguage "Robot  con ruedas")
+                     (forall (?rob)
+                        (=>
+                           (instance ?rob wheeledRobot)
+                           (exists (?whe)
+                              (and
+                                 (instance ?whe Wheel)
+                                 (part ?whe ?rob)
+                              )
+                           )
+                        )
+                     )
+                     (subclass singleWheelRobot wheelBasedRobot)
+                     	(documentation singleWheelRobot EnglishLanguage "Every robot with a &%translocationSystem formed by one &%Wheel")
+
+                        (literalName singleWheelRobot SpanishLanguage "Robot de rueda unica")
+                        (forall (?rob)
+                           (=>
+                              (instance ?rob singleWheelRobot)
+                              (exists (?whe ?trnk)
+                                 (and
+                                    (instance ?whe Wheel)
+                                    (part ?whe ?rob)
+                                    (instance ?trunk robotTrunk)
+                                    (connectedTo ?whe ?trunk)
+                                    
+                                    (part ?trunk ?rob)      
+                                 )
+                              )
+                           )
+                        )
+                        (subclass wheelRobot singleWheelRobot)
+                        (documentation wheelRobot EnglishLanguage "Any robot whose trunk is a &%Wheel that uses to translocate over a surface.")
+                           (literalName wheelRobot SpanishLanguage "Robot con forma de rueda")
+                        (forall (?rob)
+                           (=>
+                              (instance ?rob singleWheelRobot)
+                              (exists (?whe ?trnk)
+                                 (and
+                                    (instance ?whe Wheel)
+                                    (instance ?whe robotTrunk)
+                                    (part ?whe ?rob)
+                                 )
+                              )
+                           )
+                        )
+                     (subclass singleBallRobot wheelBasedRobot)
+                     	(documentation singleBallRobot EnglishLanguage "Any robot &%groundRobot able to translocate by using a single ball attached to it's trunk.")
+                        (literalName singleBallRobot SpanishLanguage "Robot con bola")
+                        (forall (?rob)
+                           (=>
+                              (instance ?rob singleBallRobot)
+                              (exists (?whe ?trnk)
+                                 (and
+                                    (instance ?whe Ball)
+                                    (part ?whe ?rob)
+                                    (instance ?trnk robotTrunk)
+                                    (connectedTo ?whe ?trnk)
+                                    (part ?trnk ?rob)      
+                                 )
+                              )
+                           )
+                        )
+                        (subclass ballRobot singleBallRobot)
+                        (documentation ballRobot EnglishLanguage "Any robot whose trunk is a a sferic &%Ball")
+                        (literalName ballRobot SpanishLanguage "Robot esferico")
+                           (forall (?rob)
+                              (=>
+                                 (instance ?rob singleBallRobot)
+                                 (exists (?whe ?trnk)
+                                    (and
+                                       (instance ?whe Ball)
+                                       (instance ?whe robotTrunk)
+                                       (part ?whe ?rob)
+                                    )
+                                 )
+                              )
+                           )
+      
+      
+         (subclass stationaryRobot Robot)
+            (literalName stationaryRobot SpanishLanguage "Robot estacionario")
+            (documentation stationaryRobot EnglishLanguage "Any robot that lacks a &%translocationSystem ")
+            
+            (subclass industrialRobot stationaryRobot)
+            (literalName industrialRobot SpanishLanguage "Robot industrial")
+            (documentation industrialRobot EnglishLanguage "Any &%stationaryRobot that is specifically designed to perform an industrial process.")
+               (forall (?rob)
+                  (=>
+                     (instance ?rob industrialRobot)
+                     (exists (?arm ?ef ?trnk)
+                        (and
+                           (instance ?arm robotArm)
+                           (instance ?ef endEffector)
+                           (instance ?trnk robotTrunk)
+                           (connectedTo ?ef ?arm)
+                           (connectedTo ?arm ?trnk
+                           (part ?arm ?rob)
+                           (part ?ef ?rob)
+                        
+                     )
+                  )
+               )
+      
+      
+      
+               

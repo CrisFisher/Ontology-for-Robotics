@@ -1,0 +1,375 @@
+(rootParentName Device)
+(subclass robotJoint Device)
+      (forall (?rJ)
+         (=>
+            (instance ?rJ robotJoint)
+            (exists (?dev1 ?dev2)
+               (and
+                  (instance ?dev1 Device)
+                  (instance ?dev2 Device)
+                  (articulatedTo ?dev1 ?dev2)
+                  (connectedTo ?dev1 ?rJ)
+                  (connectedTo ?dev2 ?rJ)
+               )
+            )
+         )
+      )
+
+
+(subclass endEffector Device)
+       (forall (?ndFctr)
+          (=>
+             (instance ?ndFctr endEffector)
+             (and
+                (exists (?rbtLmb ?robot ?Action)
+                   (and 
+                      (instance ?rbtLmb robotLimb)
+                      (part ?ndFctr ?rbtLmb)
+                     (instance ?robot Robot)
+                      (robotPart ?rbtLmb ?robot)
+                      (instance ?Action Process)
+                      (deviceCanPerform ?ndFctr ?Action )
+                      (robotAbleToPerform ?robot ?Action)
+                   )
+                )
+             )
+          )
+       )
+
+(subclass robotGripper endEffector)
+       (subclass mechanicalGripper robotGripper)
+       (subclass robotHand mechanicalGripper)
+       (subclass magneticGripper robotGripper)
+       (subclass pneumaticGripper robotGripper)
+       (subclass hydraulicGripper robotGripper)
+       (subclass robotFeet endEffector)
+       (forall (?rob ?foot)
+          (=>
+             (and 
+                (instance ?rob Robot)
+                (instance ?foot robotFoot)
+                (part ?foot ?rob) 
+             )
+            (exists (?stb)
+               (and
+                  (instance ?stb robotStabilize)   
+                   (robotAbleTo ?rob ?stb)
+               )
+             )
+          )
+      )
+       
+       (subclass robotStructuralPart Device)
+
+
+
+          (subclass robotHead robotStructuralPart )
+             (forall (?head)
+                (=> 
+                   (instance ?head robotHead)
+                   (exists (?trnk ?rob)
+                      (and
+                         (instance ?trnk robotTrunk)
+                         (instance ?rob Robot)
+                         (connectedTo ?head ?trnk)
+                         (robotPart ?head ?rob)
+                         (robotPart ?trnk ?rob)
+                      )
+                   )
+                )
+             )
+
+         (subclass robotTrunk robotStructuralPart)
+         (forall (?trnk)
+             (=> 
+                (instance ?trnk robotTrunk)
+                (exists (?rob)
+                   (and
+                      (instance ?rob Robot)
+                      (robotPart ?trnk ?rob)
+                   )
+                )
+             )
+          )
+       
+          (subclass robotLimb robotStructuralPart)
+             (subclass robotTail robotLimb)
+             (forall (?dev)
+                (=>
+                   (instance ?dev robotTail)
+                  (exists (?art)
+                  (and
+                  (instance ?art isArticulated)
+                   (hasAtribute ?dev ?art)
+                  )
+                  )
+                )
+             )
+            (subclass robotLeg robotLimb)
+               (forall (?leg)
+                  (=> 
+                     (instance ?leg robotLeg)
+                     (exists (?sys ?rob ?endEf ?trunk)
+                        (and
+                           (instance ?sys actuatorSystem)
+                           (instance ?endEf endEffector)
+                           (instance ?trunk robotTrunk)
+                           (instance ?rob Robot)
+                           (part  ?sys ?leg)                     
+                           (part ?endEf ?leg)
+                           (connectedTo ?leg ?trunk)
+                           (robotPart ?leg ?rob)
+                            (robotPart ?trunk ?rob)
+                        )
+                     )
+                  )
+               )
+         
+            (subclass robotArm robotLimb)
+               (forall (?arm)
+                  (=> 
+                     (instance ?arm robotArm)
+                     (exists (?sys ?endEf ?rob ?trunk)
+                        (and
+                           (instance ?sys actuatorSystem)
+                           (instance ?endEf endEffector)
+                           (instance ?trunk robotTrunk)
+                           (instance ?rob Robot)
+                           (part ?endEf ?arm)
+                           (part    ?sys ?arm)
+                           (connectedTo ?arm ?trunk)
+                           (robotPart ?arm ?rob)
+                           (robotPart ?trunk ?rob)
+                        )
+                     )
+                  )
+               )
+
+
+   (subclass sensingDevice Device)
+   (subclass locationSensor sensingDevice)
+      (subclass positionSensor locationSensor)
+         (subclass linearPositionSensor positionSensor)
+         (subclass angularPositionSensor positionSensor)
+      (subclass orientationSensor locationSensor)
+         (subclass Gyroscope orientationSensor)
+   (subclass proximitySensor sensingDevice)
+      (subclass usProximitySensor proximitySensor)
+      (subclass irProximitySensor proximitySensor)
+      (subclass laserScanner proximitySensor)
+   (subclass movementSensor sensingDevice)
+      (subclass inertialMovementUnit movementSensor)
+         (formedBy inertialMovementUnit Accelerometer)
+         (formedBy inertialMovementUnit Gyroscope)
+      (subclass Accelerometer movementSensor)
+   (subclass visualSensor sensingDevice)
+      (subclass Camera visualSensor)
+         (subclass videoCamara Camera)
+   (subclass lightSensor sensingDevice)
+      (subclass Photoresistor lightSensor)
+      (subclass irLightSensor lightSensor)
+
+   (subclass soundSensor sensingDevice)
+   
+   (subclass forceSensor sensingDevice)
+
+   (subclass Actuator Device)
+   (subclass electricActuator Actuator)
+      (subclass electricMotor electricActuator)
+         (subclass stepperMotor electricMotor)
+         (subclass continuousMotor electricMotor)
+            (subclass ACcontinuousMotor continuousMotor)
+            (subclass DCcontinuousMotor continuousMotor)
+         (subclass servoMotor electricMotor)
+   (subclass pneumaticActuator Actuator)
+      (subclass pneumaticCylinder pneumaticActuator)
+      (subclass vacuumGenerator pneumaticActuator)
+      (subclass pneumaticGripper pneumaticActuator)
+   (subclass hydraulicActuator Actuator)
+      (subclass hydraulicCylinder hydraulicActuator)
+   (subclass mechanicalActuator Actuator)
+
+   (subclass actuatorSystem Device)
+	   (forall (?asy)
+	      (=>
+	         (instance ?asy actuatorSystem)
+	         (exists (?act)
+	            (and
+	               (instance ?act Actuator)
+	               (formedBy ?asy ?act)
+	            )
+	         )
+	      )
+	   )
+   (subclass processingSystem Device)
+	   (forall (?asy)
+	      (=>
+	         (instance ?asy processingSystem)
+	         (exists (?act)
+	            (and
+	               (instance ?act processingDevice)
+	               (formedBy ?asy ?act)
+	            )
+	         )
+	      )
+	   )
+	(subclass electricSystem Device)
+		(forall (?asy)
+		      (=>
+		         (instance ?asy electricSystem)
+		         (exists (?act)
+		            (and
+		               (instance ?act electricDevice)
+		               (formedBy ?asy ?act)
+		            )
+		         )
+		      )
+		   )
+	
+
+
+   
+   
+
+
+
+   (subclass electricDevice Device)
+      (subclass electricComponent electricDevice)
+         (subclass passiveComponent electricComponent)
+         (subclass activeComponent electricComponent)
+
+
+
+   (subclass electronicDevice electricDevice)   
+   (subclass processingDevice electronicDevice)
+
+      (subclass Computer processingDevice)
+         (forall (?comp)
+            (=> 
+               (instance ?comp Computer)
+               (exists (?cp ?dev ?mem) 
+                  (and
+                     (instance ?cp CPU)
+                     (instance ?dev Device)
+                     (instance ?mem electronicMemory)
+                     (part ?mem ?comp)
+                     (part ?cp ?comp)
+                     (peripheralTo ?dev ?comp)
+                  )
+               )
+            )
+         )
+      (subclass CPU processingDevice)
+         (forall (?cpu)
+            (=>
+               (instance ?cpu CPU)
+               (exists (?cu ?al ?mem ?dev1 )
+                  (and
+                     (instance ?cu controlUnit)
+                     (instance ?dev1 Device)
+                     (instance ?al ALU)
+                     (instance ?mem electronicMemory)
+                     (part ?mem ?cpu)
+                     (part ?al ?cpu)
+                     (part ?cu ?cpu)
+                     (peripheralTo ?dev1 ?cpu)
+                  )
+               )
+            )
+         )
+      (subclass controlUnit processingDevice)
+      (subclass ALU processingDevice)
+      (subclass storageDevice electronicDevice)
+         (subclass electronicMemory storageDevice)
+            
+            
+(subclass comunicatingDevice Device)
+
+
+   (subclass Transmitter comunicatingDevice)
+      (forall (?trns)
+         (=> 
+            (instance ?trns Transmitter)
+            (exists (?trnsmtr)
+               (and
+                  (instance ?trnsmtr Transmit)
+                  (deviceCanPerform ?trns ?trnsmtr)
+               )
+            )
+         )
+      )
+      (subclass radioTransmitter Transmitter)
+         (forall (?rdT)
+            (=>
+               (instance ?rdT radioTransmitter)
+               (exists(?ntn)
+                  (instance ?ntn Antenna)
+                  (part ?ntn ?rdT)
+               )
+            )
+         )
+      (subclass Speaker Transmitter)
+         
+
+
+      	(forall (?dev)
+      		(=>
+      			(instance ?dev sensingDevice)
+      			(exists (?stim)
+      				(and
+      					(instance ?stim Physical)
+      					(canSense ?dev ?stim)
+      				)
+      			)
+      		)
+      	)
+
+
+
+
+
+
+         (forall (?rob ?stim )   
+            (=> 
+               (and
+                  (instance ?rob Robot)
+                  (instance ?stim Physical)
+                  (robotSense ?rob ?stim)
+               )
+               (exists (?dev1 ?rprt)
+                  (and
+                     (instance ?dev1 sensingDevice)
+                     (instance ?rprt Device)
+                     (canSense ?dev1 ?stim)
+                     (part ?dev1 ?rprt)
+                     (robotPart ?rprt ?rob)
+                  )
+               )
+            )
+         )
+   (subclass Receiver comunicatingDevice)
+      (forall (?rcvr)
+            (=> 
+               (instance ?rcvr Receiver)
+               (exists (?rcvAct)
+                  (and
+                     (instance ?rcvAct Receive)
+                     (deviceCanPerform ?rcvr ?rcvAct)
+                  )
+               )
+            )
+      )
+      (subclass radioReceiver Receiver)
+         (forall (?rdR)
+            (=>
+               (instance ?rdR radioReceiver)
+               (exists(?ntn)
+                  (instance ?ntn Antenna)
+                  (part ?ntn ?rdR)
+               )
+            )
+         )
+      
+      (subclass Microphone Receiver)
+
+   (subclass Transceiver Transmitter)

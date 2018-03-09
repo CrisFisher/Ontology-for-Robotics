@@ -1,0 +1,223 @@
+(rootParentName Skill)
+
+   (subclass robotSkill Skill)
+   (documentation robotSkill EnglishLanguage "Any action that a &%Robot can perform by it's own decision in order to complete a task.")
+      (forall (?rob ?skl)
+            (=> 
+               (and
+                  (instance ?rob Robot)
+                  (instance ?skl robotSkill)
+                  (robotAbleTo ?rob ?skl)
+               )
+               (exists (?mot)
+                  (and
+                     (instance ?mot processingSystem)
+                     (instance ?ek electricSystem)
+                     (connectedTo ?ek ?mot)
+                     (robotPart ?mot ?rob)
+                  )
+               )
+            )
+         )
+   (subclass robotMotion robotSkill)   
+   (documentation robotMotion EnglishLanguage "Any &%robotSkill that involves the movement of a &%robotPart.")
+         (forall (?rob ?skl)
+            (=> 
+               (and
+                  (instance ?rob Robot)
+                  (instance ?skl robotMotion)
+                  (robotAbleTo ?rob ?skl)
+               )
+               (exists (?mot)
+                  (and
+                     (instance ?mot actuatorSystem)
+                     (instance ?ek electricSystem)
+                     (connectedTo ?ek ?mot)
+                     (robotPart ?mot ?rob)
+                  )
+               )
+            )
+         )
+                   
+   (subclass robotManipulate robotMotion)
+   (documentation robotManipulate EnglishLanguage "Any &%robotMotion in which the &%Robot changes the properties of some external &%Object.")
+      (subclass robotGrip robotManipulate)
+      (documentation robotGrip EnglishLanguage "Any &%robotManipulate in which the &%Robot  holds an external &%Object, making the object's &%Location dependant on the &%robotPart that is being used to &%robotGrip.")
+
+      
+        (subclass robotGrab robotGrip)
+        (documentation robotGrab EnglishLanguage "Any &%robotGrip in which the &%Object is being translocated with the &%robotPart that is grabbing it.	")
+
+
+        (forall (?rob ?skl)
+            (=> 
+               (and
+                  (instance ?rob Robot)
+                  (instance ?skl robotGrab)
+                  (robotAbleTo ?rob ?skl)
+               )
+               (exists (?hand1  ?arm1 )
+                  (and
+                        (instance ?hand1 robotHand)
+                        (instance ?act actuatorSystem)
+                        (instance ?arm1 robotArm)
+                        (part ?act ?arm1)
+                        (articulatedTo ?hand1 ?arm1)
+                  )
+               )
+            )
+         )
+
+      
+   
+
+
+   (subclass robotPoseChange robotMotion)
+   (documentation robotPoseChange EnglishLanguage "Any &%robotMotion that finish with the robot's &%pose different that at it's begining.")
+      (instance robotDodge robotPoseChange)
+      (documentation robotDodge EnglishLanguage "Any &%robotPoseChange mean to avoid a collision with another &%Object.")
+   (subclass robotTranslocation robotMotion)
+   	(documentation robotTranslocation EnglishLanguage "Any &%robotMotion meant to change the location of the &%Robot.")
+      (subclass robotGroundTranslocation robotTranslocation)
+      (documentation robotGroundTranslocation EnglishLanguage "Any &%robotTranslocation performed in contact with the ground.")
+               (subclass robotCrawl robotGroundTranslocation)
+               (documentation robotCrawl EnglishLanguage "Any &%robotGroundTranslocation in which the &%Robot drags it's &%robotTrunk over the ground.")
+               (subclass robotWheelTranslocation robotGroundTranslocation)
+               (documentation robotWheelTranslocation EnglishLanguage "Any &%robotGroundTranslocation in which the &%Robot uses a &%Wheel as a &%translocationSystem")
+               (subclass robotRoll robotGroundTranslocation)
+                  (documentation robotRoll EnglishLanguage "Any &%robotGroundTranslocation in which the &%Robot rolls over its trunk in order to translocate.")
+               (subclass robotAmbulation robotGroundTranslocation)
+               	(documentation robotAmbulation EnglishLanguage "Any &%robotGroundTranslocation in which the &%Robot is using at least two &%robotLeg  as its &%translocationSystem.")
+               
+                  (forall (?rbt ?skl)
+                        (=>
+                           (and
+                              (instance ?rbt Robot) 
+                              (instance ?skl robotAmbulation)
+                              (robotAbleTo ?rbt ?skl)
+                           )
+                           (exists (?rbtFt1 ?rbtFt2 ?rbtLg1 ?rbtLg2 ?trnk ?jnt ?jnt2 ?acts)
+                              (and
+                                    (instance ?rbtFt1 robotFeet)
+                                    (instance ?rbtFt2 robotFeet)
+                                    (instance ?jnt robotJoint)
+                                    (instance ?jnt2 robotJoint)
+                                    (instance ?acts actuatorSystem)
+                                    (instance ?rbtLg1 robotLeg)
+                                    (instance ?rbtLg2 robotLeg)
+                                    (instance ?trnk robotTrunk)
+                                    (articulatedTo ?rbtLg1 ?jnt)
+                                    (articulatedTo ?rbtLg2 ?jnt2)
+                                    (articulatedTo ?rbtFt1 ?jnt)
+                                    (articulatedTo ?rbtFt2 ?jnt2)
+                                    (part ?acts ?rbtLg1)
+                                    (part ?acts ?rbtLg2)
+                              )
+                           )
+                        )
+                     )   
+
+                  (subclass robotWalk robotAmbulation)
+                  (documentation robotWalk EnglishLanguage "Any &%robotAmbulation in which at least one leg is in contact with the ground in every moment.")
+                  (subclass robotRun robotAmbulation)
+                  (documentation robotRun EnglishLanguage "Any &%robotAmbulation in which all legs loose contact with the ground in some moment.")
+
+               (subclass robotStairMovement robotGroundTranslocation)
+               	(documentation robotStairMovement EnglishLanguage "Any &%robotGroundTranslocation in which the &%Robot translocates over a stair.")
+
+            (subclass robotAquaticTranslocation robotTranslocation)
+            	(documentation robotAquaticTranslocation EnglishLanguage "Any &%robotTranslocation performed in a &%aquaticArea")
+               (subclass robotDiving robotAquaticTranslocation)
+               	(documentation robotDiving EnglishLanguage "Any &%robotAquaticTranslocation performed bellow the surface of the water.")
+               (subclass robotSwimming robotAquaticTranslocation)
+               	(documentation robotSwimming EnglishLanguage "Any &%robotAquaticTranslocation performed over the surface of the water")
+               (subclass robotAquaticBottomTranslocation robotAquaticTranslocation)
+               (documentation robotAquaticBottomTranslocation "Any type of &%robotGroundTranslocation performed bellow an &%aquaticArea in contact with the ground.")
+               (subclass robotAquaticBottomTranslocation robotGroundTranslocation)
+         
+            (subclass robotActionTranslocation robotTranslocation)
+            (documentation robotActionTranslocation EnglishLanguage "Any type of &%robotTranslocation in which the &%Robot is performing other task at the time.")
+               (instance robotJump robotTranslocation)
+
+               (subclass robotImpel robotActionTranslocation)
+               (documentation robotImpel EnglishLanguage "Any type of &%robotActionTranslocation that involves the movement of another &%Oject by impelling it.")
+               (subclass robotCarry robotActionTranslocation)
+               (documentation robotCarry EnglishLanguage "Any type of &%robotActionTranslocation in which the &%Robot is moving another &%Object by holding or supporting it.")
+               (subclass robotObstacleAvoid robotActionTranslocation)
+               (documentation robotObstacleAvoid EnglishLanguage "Any type of &%robotActionTranslocation in which the &%Robot is able to sense an &%Object and adapt the trajectory to avoid it.")
+               (subclass robotLineTrack robotActionTranslocation)
+        		(documentation robotLineTrack EnglishLanguage "Any type of &%robotActionTranslocation in which the &%Robot is following an external trajectory") 
+
+
+
+
+
+         (subclass robotSense robotSkill)
+         (documentation robotSense EnglishLanguage "Any type of &%robotSkill that involves the analysys of the environment in which the robot is operating." )
+               (forall (?rob ?sns)
+                  (=>
+                     (and
+                        (instance ?rob Robot)
+                        (instance ?sns robotSense)
+                        (robotAbleTo ?rob ?sns)
+                     )
+                     (exists (?snsDev )
+                        (and
+                           (instance ?sns sensingDevice)
+                           (robotPart ?sns ?rob)
+                        )   
+                     )
+                  )
+               )
+           (subclass robotVision robotSense)
+           (documentation robotVision EnglishLanguage "Any type of &%robotSense in which the &%Robot extracts visual information of the environment.")
+               		(forall (?rob ?vs)
+               			(=>
+               				(and
+               					(instance ?rob Robot)
+               					(instance ?vs robotVision)
+               				)
+               				(exists(?cm)
+               					(and
+               						(instance ?cm Camera)
+               						(robotPart ?cm ?rob)
+               					)
+
+               				)
+                                                        ) 
+                                        )
+      (subclass robotComunication robotSkill)
+      (documentation robotComunication EnglishLanguage "Any kind of &%robotSkill that involves &%Information to be emited or received by the &%Robot.")
+               (forall (?rob ?com)
+                  (=>
+                     (and
+                        (instance ?rob Robot)
+                        (instance ?com robotComunicate)
+                        (robotAbleTo ?rob ?com)
+                     )
+                     (and
+                        (instance ?comDev comunicatingDevice)
+                        (robotPart ?comDev ?rob)
+                     )
+                  )
+               )
+
+		(subclass robotHumanLanguageComunication robotComunication)
+		(documentation robotHumanLanguageComunication EnglishLanguage "Any &%robotSkill that involves the &%robotComunication with a &%Human being")
+               (forall (?rob ?com)
+                  (=>
+                     (and
+                        (instance ?rob Robot)
+                        (instance ?com robotHumanLanguageComunication)
+                        (robotAbleTo ?rob ?com)
+                     )
+                     (and
+                        (instance ?mcr Microphone)
+                        (instance ?spk loudSpeaker)
+                        (robotPart ?mcr ?rob)
+                        (robotPart ?spk ?rob)  
+                     )
+                  )
+               )
+
+                                                                                                                                       

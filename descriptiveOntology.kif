@@ -1,0 +1,286 @@
+(forall (?rob ?proc ?pose1 ?pose2)
+					(=>
+						(and
+							(instance ?rob Robot)
+							(instance ?proc robotPoseChange)
+							(instance ?pose1 PoseMeasure)
+							(instance ?pose2 PoseMeasure)
+							(robotPoseChange ?rob ?pose2)
+							(pose ?rob ?pose1)
+						)
+						(and
+							(instance ?pose2 PoseMeasure)
+							(pose ?rob ?pose2)
+							(not 
+								(equal ?pose1 ?pose2)
+							)
+							(not
+								(pose ?rob ?pose1)
+							)
+						)
+					)
+				)
+
+
+
+(forall (?rbtPrc ?rbt)
+         (=> 
+            (and
+               (instance ?rbtPrc robotSkill)
+               (instance ?rbt Robot)
+               (robotAbleTo ?rbt ?rbtPrc)
+            )
+            (exists (?rbPrt ?prcPrt)
+               (and
+                  (instance ?rbtPrt Device)
+                  (deviceCanPerform ?rbtPrt ?rbtPrc)
+                  (robotPart ?rbtPrt ?rbt)
+               )
+            )
+         )
+      )
+
+(forall (?robot ?measureOne ?skl)
+					(=>
+					(and
+						(instance ?robot Robot)
+						(instance ?measureOne positionMeasure)
+						(positionedAt ?robot ?measureOne)
+						(instance ?skl robotGroundTranslocation)
+						(robotPerform ?robot ?skl)
+						(location ?robot ?surface upon)
+						(instance ?surface LandArea)
+					)
+					(exists (?measureTwo)
+					(and
+						(instance ?measureTwo positionMeasure)
+						(positionedAt ?robot ?measureTwo)
+						(location ?robot ?surface2 upon)
+						(instance ?measureTwo positionMeasure)
+						(equal (?surface ?surface2))
+						(not (equal( ?measureOne ?measureTwo)))
+					)
+					)
+				)
+			)
+
+
+			(forall (?rob ?line ?stim ?lflw)
+							(=>
+								(and
+									(instance ?lflw robotLineTrack)
+									(instance ?rob Robot)
+									(instance ?line Physical)
+									(?lflw ?rob ?line)
+									(instance ?stim Physical)
+								)
+								(and
+									(formedBy ?line ?stim)
+									(exists (?prt)
+										(and
+											(instance ?prt Device)
+											(canSense ?prt ?stim)
+											(robotPart ?prt ?rob)
+										)
+									)
+								)
+							)
+						)
+
+
+
+					(forall (?rob)
+							(=>
+								(instance ?rob balledRobot)
+								(exists (?k)
+									(and
+										(instance ?k robotRoll)
+										(robotAbleTo ?rob ?k)
+									)
+								)	
+							)
+						)
+
+					(forall (?rob)
+					(=> 
+						(instance ?rob stationaryRobot)
+						(not (exists (?mov)
+							(and
+								(instance ?mov robotTranslocation)
+								(robotAbleTo ?rob ?mov)
+							)
+							)
+						)
+					)
+				)
+
+
+					(forall (?rob)
+						(=>
+							(instance ?rob aquaticGroundRobot)
+							(exists (?movt ?aqpr)
+								(and
+									(instance ?movt groundTranslocation)
+										
+									(robotAbleTo ?rob ?movt)
+								)
+							)
+						)
+					)
+					(forall (?rob)
+							(=>
+								(instance ?rob leggedRobot)
+								(exists (?o)
+									(and 
+									(instance ?o robotAmbulate)
+									(robotAbleTo ?rob ?o))
+								)							
+							)
+						)
+
+						
+					(forall (?rob)
+							(=>
+								(instance ?rob balledRobot)
+								(exists (?k)
+									(and
+										(instance ?k robotRoll)
+										(robotAbleTo ?rob ?k)
+									)
+								)	
+							)
+						)
+
+
+
+					(forall (?rob)
+							(=>
+								(instance ?rob wheeledRobot)
+								(exists (?k)
+									(and
+									(instance ?k robotWheelTranslocation)
+									(robotAbleTo ?rob ?k)
+									)
+								)
+							)
+						)
+
+
+			forall (?rob)
+						(=>
+							(instance ?rob aquaticGroundRobot)
+							(exists (?mov ?mov2 ?aqpr)
+								(and
+									(instance ?mov groundTranslocation)
+									(instance ?mov2 subAquaticTranslocation)
+									(robotAbleTo ?rob ?mov)
+									(not (robotAbleTo (?rob ?mov2)))								)
+								)
+							)
+						)
+					)
+
+
+			(forall  (?rob)
+						(=>
+							(instance ?rob floatingRobot)
+							(exists ( ?mov )
+								(and
+									(instance ?mov robotAquaticTranslocation)
+									(robotAbleTo ?rob ?mov)
+								)
+							)
+						)
+					)
+
+
+			
+			(forall (?robot ?sns)
+				(=>
+					(and
+						(instance ?robot Robot)
+						(instance ?sns robotSense)
+						(robotHasSkill ?robot ?sns))
+					(exists (?snsDev)
+						(and
+							(instance ?snsDev Device)
+							(deviceCanPerform ?snsDev ?sns)
+							(robotPart ?snsDev ?robot)
+						)
+					)
+				)
+			)
+
+
+
+
+			(forall (?rob ?proc)
+							(=>
+							   (and
+							     (instance ?rob aquaticRobot)
+							      (instance ?SWIM robotAquaticTranslocation)
+							      (robotPerform ?rob ?SWIM)
+							  )
+							   (exists (?AREA)
+							      (and
+							         (instance ?AREA WaterArea)
+							         (located ?rob ?AREA Below)
+							         (instance ?rob aquaticRobot)
+							      )
+								)
+							)
+						)
+			
+
+						(forall (?rob ?mov ?water)
+							(=> 
+								(and
+									(instance ?rob Robot)
+									(robotPerform ?mov)
+									(instance ?mov robotGroundTranslocation)
+									(instance ?WATER WaterArea)
+									(orientation ?rob ?water Below)
+								)
+								(and
+									(instance ?mov robotAquaticBottomTranslocation)
+									(instance ?rob aquaticBottomRobot)
+								)
+							)
+						)
+
+
+
+   (subclass part Relation)
+   		(subclass robotPart part)
+     
+
+   (subclass robotCanSense robotAbleTo)
+     
+   
+   (subclass robotAbleTo Relation)
+   		(subclass robotAbleTo antysimmetricRelation)
+     
+   
+   (subclass deviceCanPerform Relation)
+   		(subclass deviceCanPerform antysimmetricRelation)
+     
+      (subclass robotCanPerform deviceCanPerform)
+     
+
+   (subclass formedBy Relation)
+
+     
+   
+   (subclass canSense Relation)
+   	(subclass canSense antysimmetricRelation)
+     
+      (subclass robotCanSense canSense)
+     
+   (subclass attachedTo simmetricRelation)
+   (subclass attachedTo spatialRelation)
+   
+      (subclass connectedTo attachedTo) 
+     
+         (subclass peripheralTo connectedTo) 
+         (subclass peripheralTo contentBearingRelation)
+     

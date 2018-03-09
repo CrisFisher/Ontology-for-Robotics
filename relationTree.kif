@@ -1,0 +1,55 @@
+   
+    
+   
+(rootParentName Relation)
+   
+
+   (subclass part Relation)
+      (domain 1 part Device)
+      (domain 2 part Device)
+
+   (subclass robotCanSense robotAbleTo)
+      (domain robotCanSense 1 Robot)
+      (domain robotCanSense 2 Physical)
+   
+   (subclass robotAbleTo Relation)
+      (domain 1 robotAbleTo Robot)
+      (domain 2 robotAbleTo robotSkill)
+
+   (subclass robotPart part)
+      (domain 1 robotPart Device)
+      (domain 2 robotPart Robot)
+
+   (subclass deviceCanPerform Relation)
+      (domain 1 deviceCanPerform Device)
+      (domain 2 deviceCanPerform Process)
+   
+      (subclass robotCanPerform deviceCanPerform)
+         (domain 1 robotPerform Robot)
+         (domain 2 robotPerform Process) 
+
+
+   (subclass formedBy Relation)
+      (domain 1 formedBy Device)
+      (domain 2 formedBy Device)
+
+   
+   (subclass canSense Relation)
+      (domain 1 canSense Device)
+      (domain 2 canSense Measure)
+
+      (subclass robotCanSense canSense)
+         (domain 1 robotCanSense Robot)
+         (domain 2 robotCanSense Measure)
+
+   (subclass attachedTo Relation)
+      (domain 1 attachedTo Device)
+      (domain 2 attachedTo Device)
+
+      (subclass connectedTo attachedTo) 
+         (domain 1 connectedTo Device)
+         (domain 2 connectedTo Device)
+
+         (subclass peripheralTo connectedTo) 
+                  (domain 1 connectedTo Device)
+                  (domain 2 connectedTo Device)

@@ -1,0 +1,1264 @@
+;;Robot types
+
+
+
+(documentation Robot EnglishLanguage " An &%Agent and a &%Device purposed to act in the physical world in order to accomplish one or more tasks. As an &%Agent has different &%robotSkill thanks to the diverse stuctures of &%Device that form the robot. ")
+
+
+(subclass aerialRobot Robot)
+(literalName aerialRobot SpanishLanguage "Robot aereo")
+(documentation aerialRobot EnglishLanguage "Any robot that has an &%aerialTranslocationSystem as it's main &%translocationSystem")
+
+	(subclass copterRobot aerialRobot)
+		(documentation copterRobot EnglishLanguage "Any robot that has an &%aerialTranslocationSystem formed by at least one &%Rotor")
+		(literalName copterRobot SpanishLanguage "Robot de tipo coptero")
+		
+		(subclass helicopterRobot copterRobot)
+			(literalName helicopterRobot SpanishLanguage "Robot helicoptero")
+			(documentation helicopterRobot EnglishLanguage "Any robot that has an &%aerialTranslocationSystem formed by two different &%Rotor")
+		
+		(subclass quadroCopter copterRobot)
+			(documentation quadroCopter EnglishLanguage "Any robot that has an &%aerialTranslocationSystem formed by four different &%Rotor")
+			(literalName quadrocopter SpanishLanguage "Robot quadrucoptero")
+		
+		(subclass multicopterRobot copterRobot)
+			(literalName multicopterRobot SpanishLanguage "Robot multicoptero")
+			(documentation multicopterRobot EnglishLanguage "Any robot that has an &%aerialTranslocationSystem formed by at leats five different &%Rotor")
+	
+	(subclass fixedWingRobot aerialRobot)
+		(documentation fixedWingRobot EnglishLanguage "Any robot that has an &%aerialTranslocationSystem formed by &%robotWing")
+		(literalName fixedWingRobot SpanishLanguage "Robot de ala fija")
+				
+		(subclass airPlaneRobot fixedWingRobot)
+			(documentation airPlaneRobot EnglishLanguage "Any &%fixedWingRobot with an &%aerialTranslocationSystem formed by a &%Propeller")
+
+
+(subclass aquaticRobot Robot)
+	(documentation aquaticRobot EnglishLanguage "Any robot that has an &%aerialTranslocationSystem formed by at least one &%Rotor")
+	(literalName aquaticRobot SpanishLanguage "Robot aquatico")
+
+	(subclass floatingRobot aquaticRobot)
+	 	(documentation floatingRobot EnglishLanguage "Any &%aquaticRobot capable to operate in the surface of the water.")
+	 	(literalName floatingRobot SpanishLanguage "Robot aquatico, flotante")
+
+	(subclass aquaticGroundRobot aquaticRobot)
+		(documentation aquaticGroundRobot EnglishLanguage "Any &%aquaticRobot capable to operate in an aquatic environment, in contact with the ground.")
+		(literalName aquaticGroundRobot SpanishLanguage "Robot fondo aquatico")
+
+
+	(subclass divingRobot aquaticRobot)
+		(documentation divingRobot EnglishLanguage "Any &%aquaticRobot capable to operate in an aquatic environment without contact with the surface or the ground.")
+		(literalName divingRobot SpanishLanguage "Robot aquatico, nadador")
+
+
+	(subclass amphibiousRobot Robot)
+		(literalName amphibiousRobot SpanishLanguage "Robot anfibio")
+		(documentation amphibiousRobot EnglishLanguage "Any &%Robot capable to operate in aquatic and terrestrial environments")
+
+
+
+(subclass groundRobot Robot)
+			(literalName groundRobot SpanishLanguage "Robot de tierra")
+			(documentation groundRobot EnglishLanguage "Any &%Robot that operate while in contact with the ground")
+
+			(subclass trackedRobot groundRobot)
+				(literalName trackeddRobot SpanishLanguage "Robot de railes")
+				(documentation trackedRobot EnglishLanguage "Any robot whose trajectory is limitied to a &%track in which it is located.")
+				
+(forall (?rob)
+	(=>
+		(instance ?rob trackedRobot)
+		(exists (?trk)
+			(and
+				(instance ?trk trackForVehicle)
+				(trackedIn ?rob ?trk)
+			)
+		)
+	)
+			
+			(subclass leggedRobot groundRobot)
+				(literalName leggeddRobot SpanishLanguage "Robot con piernas")
+				(documentation leggedRobot EnglishLanguage "Any &%Robot that has at least a &%robotLeg")
+(forall (?rob)
+	(=>
+		(instance ?rob leggedRobot)
+		(exists(?leg ?trunk)
+			(and
+				(instance ?leg robotLeg)
+				(instance ?trunk robotTrunk)
+				(articulatedTo ?leg ?trunk)
+				(robotPart ?trunk ?rob)
+			)
+		)
+	)
+)
+	(subclass bipedalRobot leggedRobot)
+		(documentation bipedalRobot EnglishLanguage "Any &%leggedRobot that has two &%robotLeg connectedTo it's &%robotTrunk")
+		(literalName bipedalRobot SpanishLanguage "Robot bipedo")
+	(forall (?rob)
+			(=>
+			(instance ?rob bipedalRobot)
+				(exists (?leg1 ?leg2)
+					(and
+						(instance ?leg1 robotLeg)
+						(instance ?leg2 robotLeg)
+						(instance ?trunk robotTrunk)
+						(articulatedTo ?leg1 ?trunk)
+						(articulatedTo ?leg2 ?trunk)
+						(robotPart ?trunk ?rob)
+						(not 
+							(exists (?leg3)
+								(and
+									(instance ?leg3 robotLeg)
+									(or
+										(part ?leg3 ?rob)
+										(articulatedTo ?leg4 ?trnk)
+									)
+								)
+							)
+						)
+					)
+				)
+			)
+
+
+
+
+(forall (?rob)
+	(=>
+		(instance ?rob Robot)
+		(exists (?trnk)
+			(and
+				(instance ?trunk robotTrunk)
+				(robotPart ?trunk ?rob)
+			)
+		)
+	)
+)
+
+
+(subclass humanoidRobot bipedalRobot)
+(documentation humanoidRobot EnglishLanguage "Any &%bipedalRobot that has two &%robotArm and one &%robotHead")
+(literalName humanoidRobot SpanishLanguage "Robot humanoide")
+(forall (?rob)
+	(=>
+		(instance ?rob humanoidRobot)
+		(and
+			(exists (?arm1 ?arm2 ?trnk ?head)
+				(and
+					(instance ?arm1 robotArm)
+					(instance ?arm2 robotArm)
+					(instance ?trunk robotTrunk)
+					(instance ?head robotHead)
+					(articulatedTo ?head ?trunk)
+					(articulatedTo ?arm1 ?trunk)
+					(articulatedTo ?arm2 ?trunk)
+					(robotPart ?trunk ?rob)
+				)
+			)
+			(not 
+				(exists (?head2)
+					(and
+						(instance ?head2 robotHead)
+						(robotPart ?head2 ?rob)
+					)
+				)
+			)
+			(not 
+				(exists (?arm3)
+					(and
+						(instance ?arm3 robotArm)
+						(robotPart ?arm3 ?rob)
+					)
+				)
+			)
+		)
+	)
+)
+(subclass quadrupedalRobot leggedRobot)
+	(literalName quadrupedalRobot SpanishLanguage "Robot quadrupedo")
+	(documentation quadrupedalRobot EnglishLanguage "&%leggedRobot with 4 &%robotLeg connected to it's &%robotTrunk")
+	(forall (?rob)
+		(=> 
+			(instance ?rob quadrupedalRobot) 
+			(exists (?leg1 ?leg2 ?leg3 ?leg4 ?trnk)
+				(and
+					(instance ?trunk robotTrunk)
+					(instance ?leg1 robotLeg)
+					(instance ?leg2 robotLeg)
+					(instance ?leg3 robotLeg)
+					(instance ?leg4 robotLeg)
+					(robotPart ?trunk ?rob)
+					(connectedTo ?leg1 ?trunk)
+					(connectedTo ?leg2 ?trunk)
+					(connectedTo ?leg3 ?trunk)
+					(connectedTo ?leg4 ?trunk)
+					(part ?trunk ?rob)
+					(not 
+						(exists (?leg5)
+							(and 
+								(instance ?leg5 robotLeg)
+								(part ?leg5 ?rob)
+							)
+						)
+					)
+				)
+			)
+		)
+	)
+(subclass hexapodRobot leggedRobot)
+	(documentation hexapodRobot EnglishLanguage "&%leggedRobot with 6 &%robotLeg connected to it's &%robotTrunk")
+	(literalName hexapodRobot SpanishLanguage "Robot hexapodo")
+
+	(forall (?rob)
+		(=> 
+			(instance ?rob hexapodRobot) 
+			(exists (?leg1 ?leg2 ?leg3 ?leg4 ?leg5 ?leg6 ?trunk)
+				(and
+					(instance ?trunk robotTrunk)
+					(instance ?leg1 robotLeg)
+					(instance ?leg2 robotLeg)
+					(instance ?leg3 robotLeg)
+					(instance ?leg4 robotLeg)
+					(instance ?leg5 robotLeg)
+					(instance ?leg6 robotLeg)
+					(connectedTo ?leg1 ?trunk)
+					(connectedTo ?leg2 ?trunk)
+					(connectedTo ?leg3 ?trunk)
+					(connectedTo ?leg4 ?trunk)
+					(connectedTo ?leg5 ?trunk)
+					(connectedTo ?leg6 ?trunk)
+					(robotPart ?trunk ?rob)
+					(not
+						(exists (?leg7)
+							(and 
+								(instance ?leg7 robotLeg)
+								(part ?leg7 ?rob)
+							)
+						)
+					)
+				)
+			)
+		)
+	)
+
+(subclass wheelBasedRobot groundRobot)
+	(documentation wheelBasedRobot EnglishLanguage "Any robot with a &%translocationSystemthat involves at least one &%Wheel")
+	(literalName wheelBasedRobot SpanishLanguage "Robotcon ruedas")
+	(forall (?rob)
+		(=>
+			(instance ?rob wheeledRobot)
+			(exists (?whe)
+				(and
+					(instance ?whe Wheel)
+					(part ?whe ?rob)
+				)
+			)
+		)
+	)
+(subclass singleWheelRobot wheelBasedRobot)
+	(documentation singleWheelRobot EnglishLanguage "Every robot with a &%translocationSystem formed by one &%Wheel")
+
+	(literalName singleWheelRobot SpanishLanguage "Robot de rueda unica")
+	(forall (?rob)
+		(=>
+			(instance ?rob singleWheelRobot)
+			(exists (?whe ?trnk)
+				(and
+					(instance ?whe Wheel)
+					(part ?whe ?rob)
+					(instance ?trunk robotTrunk)
+					(connectedTo ?whe ?trunk)
+					(part ?trunk ?rob)
+				)
+			)
+		)
+	)
+(subclass wheelRobot singleWheelRobot)
+	(documentation wheelRobot EnglishLanguage "Any robot whose trunk is a &%Wheel that uses to translocate over a surface.")
+	(literalName wheelRobot SpanishLanguage "Robot con forma de rueda")
+	(forall (?rob)
+		(=>
+			(instance ?rob singleWheelRobot)
+			(exists (?whe ?trnk)
+				(and
+					(instance ?whe Wheel)
+					(instance ?whe robotTrunk)
+					(part ?whe ?rob)
+				)
+			)
+		)
+	)
+(subclass singleBallRobot wheelBasedRobot)
+	(documentation singleBallRobot EnglishLanguage "Any robot &%groundRobot able to translocate by using a single ball attached to it's trunk.")
+	(literalName singleBallRobot SpanishLanguage "Robot con bola")
+	(forall (?rob)
+		(=>
+			(instance ?rob singleBallRobot)
+			(exists (?whe ?trnk)
+				(and
+					(instance ?whe Ball)
+					(part ?whe ?rob)
+					(instance ?trnk robotTrunk)
+					(connectedTo ?whe ?trnk)
+					(part ?trnk ?rob)
+				)
+			)
+		)
+	)
+(subclass ballRobot singleBallRobot)
+(documentation ballRobot EnglishLanguage "Any robot whose trunk is a a sferic &%Ball")
+(literalName ballRobot SpanishLanguage "Robot esferico")
+(forall (?rob)
+	(=>
+		(instance ?rob singleBallRobot)
+		(exists (?whe ?trnk)
+			(and
+				(instance ?whe Ball)
+				(instance ?whe robotTrunk)
+				(part ?whe ?rob)
+			)
+		)
+	)
+)
+
+
+(subclass stationaryRobot Robot)
+(literalName stationaryRobot SpanishLanguage "Robot estacionario")
+(documentation stationaryRobot EnglishLanguage "Any robot that lacks a &%translocationSystem ")
+
+(subclass industrialRobot stationaryRobot)
+(literalName industrialRobot SpanishLanguage "Robot industrial")
+(documentation industrialRobot EnglishLanguage "Any &%stationaryRobot that is specifically designed to perform an industrial process.")
+(forall (?rob)
+	(=>
+		(instance ?rob industrialRobot)
+		(exists (?arm ?ef ?trnk)
+		(and
+			(instance ?arm robotArm)
+			(instance ?ef endEffector)
+			(instance ?trnk robotTrunk)
+			(connectedTo ?ef ?arm)
+			(connectedTo ?arm ?trnk)
+			(part ?arm ?rob)
+			(part ?ef ?rob)
+		)
+	)
+)
+
+
+;;DESCRIPTIVE
+
+
+
+(forall (?rob ?proc ?pose1 ?pose2)
+					(=>
+						(and
+							(instance ?rob Robot)
+							(instance ?proc robotPoseChange)
+							(instance ?pose1 PoseMeasure)
+							(instance ?pose2 PoseMeasure)
+							(robotPoseChange ?rob ?pose2)
+							(pose ?rob ?pose1)
+						)
+						(and
+							(instance ?pose2 PoseMeasure)
+							(pose ?rob ?pose2)
+							(not 
+								(equal ?pose1 ?pose2)
+							)
+							(not
+								(pose ?rob ?pose1)
+							)
+						)
+					)
+				)
+
+
+
+(forall (?rbtPrc ?rbt)
+         (=> 
+            (and
+               (instance ?rbtPrc robotSkill)
+               (instance ?rbt Robot)
+               (robotAbleTo ?rbt ?rbtPrc)
+            )
+            (exists (?rbPrt ?prcPrt)
+               (and
+                  (instance ?rbtPrt Device)
+                  (deviceCanPerform ?rbtPrt ?rbtPrc)
+                  (robotPart ?rbtPrt ?rbt)
+               )
+            )
+         )
+      )
+
+(forall (?robot ?measureOne ?skl)
+					(=>
+					(and
+						(instance ?robot Robot)
+						(instance ?measureOne positionMeasure)
+						(positionedAt ?robot ?measureOne)
+						(instance ?skl robotGroundTranslocation)
+						(robotPerform ?robot ?skl)
+						(location ?robot ?surface upon)
+						(instance ?surface LandArea)
+					)
+					(exists (?measureTwo)
+					(and
+						(instance ?measureTwo positionMeasure)
+						(positionedAt ?robot ?measureTwo)
+						(location ?robot ?surface2 upon)
+						(instance ?measureTwo positionMeasure)
+						(equal (?surface ?surface2))
+						(not (equal( ?measureOne ?measureTwo)))
+					)
+					)
+				)
+			)
+
+
+			(forall (?rob ?line ?stim ?lflw)
+							(=>
+								(and
+									(instance ?lflw robotLineTrack)
+									(instance ?rob Robot)
+									(instance ?line Physical)
+									(?lflw ?rob ?line)
+									(instance ?stim Physical)
+								)
+								(and
+									(formedBy ?line ?stim)
+									(exists (?prt)
+										(and
+											(instance ?prt Device)
+											(canSense ?prt ?stim)
+											(robotPart ?prt ?rob)
+										)
+									)
+								)
+							)
+						)
+
+
+
+					(forall (?rob)
+							(=>
+								(instance ?rob balledRobot)
+								(exists (?k)
+									(and
+										(instance ?k robotRoll)
+										(robotAbleTo ?rob ?k)
+									)
+								)	
+							)
+						)
+
+					(forall (?rob)
+					(=> 
+						(instance ?rob stationaryRobot)
+						(not (exists (?mov)
+							(and
+								(instance ?mov robotTranslocation)
+								(robotAbleTo ?rob ?mov)
+							)
+							)
+						)
+					)
+				)
+
+
+					(forall (?rob)
+						(=>
+							(instance ?rob aquaticGroundRobot)
+							(exists (?movt ?aqpr)
+								(and
+									(instance ?movt groundTranslocation)
+										
+									(robotAbleTo ?rob ?movt)
+								)
+							)
+						)
+					)
+					(forall (?rob)
+							(=>
+								(instance ?rob leggedRobot)
+								(exists (?o)
+									(and 
+									(instance ?o robotAmbulate)
+									(robotAbleTo ?rob ?o))
+								)							
+							)
+						)
+
+						
+					(forall (?rob)
+							(=>
+								(instance ?rob balledRobot)
+								(exists (?k)
+									(and
+										(instance ?k robotRoll)
+										(robotAbleTo ?rob ?k)
+									)
+								)	
+							)
+						)
+
+
+
+					(forall (?rob)
+							(=>
+								(instance ?rob wheeledRobot)
+								(exists (?k)
+									(and
+									(instance ?k robotWheelTranslocation)
+									(robotAbleTo ?rob ?k)
+									)
+								)
+							)
+						)
+
+
+			forall (?rob)
+						(=>
+							(instance ?rob aquaticGroundRobot)
+							(exists (?mov ?mov2 ?aqpr)
+								(and
+									(instance ?mov groundTranslocation)
+									(instance ?mov2 subAquaticTranslocation)
+									(robotAbleTo ?rob ?mov)
+									(not (robotAbleTo (?rob ?mov2)))								)
+								)
+							)
+						)
+					)
+
+
+			(forall  (?rob)
+						(=>
+							(instance ?rob floatingRobot)
+							(exists ( ?mov )
+								(and
+									(instance ?mov robotAquaticTranslocation)
+									(robotAbleTo ?rob ?mov)
+								)
+							)
+						)
+					)
+
+
+			
+			(forall (?robot ?sns)
+				(=>
+					(and
+						(instance ?robot Robot)
+						(instance ?sns robotSense)
+						(robotHasSkill ?robot ?sns))
+					(exists (?snsDev)
+						(and
+							(instance ?snsDev Device)
+							(deviceCanPerform ?snsDev ?sns)
+							(robotPart ?snsDev ?robot)
+						)
+					)
+				)
+			)
+
+
+
+
+			(forall (?rob ?proc)
+							(=>
+							   (and
+							     (instance ?rob aquaticRobot)
+							      (instance ?SWIM robotAquaticTranslocation)
+							      (robotPerform ?rob ?SWIM)
+							  )
+							   (exists (?AREA)
+							      (and
+							         (instance ?AREA WaterArea)
+							         (located ?rob ?AREA Below)
+							         (instance ?rob aquaticRobot)
+							      )
+								)
+							)
+						)
+			
+
+						(forall (?rob ?mov ?water)
+							(=> 
+								(and
+									(instance ?rob Robot)
+									(robotPerform ?mov)
+									(instance ?mov robotGroundTranslocation)
+									(instance ?WATER WaterArea)
+									(orientation ?rob ?water Below)
+								)
+								(and
+									(instance ?mov robotAquaticBottomTranslocation)
+									(instance ?rob aquaticBottomRobot)
+								)
+							)
+						)
+
+
+
+   (subclass part Relation)
+   		(subclass robotPart part)
+     
+
+   (subclass robotCanSense robotAbleTo)
+     
+   
+   (subclass robotAbleTo Relation)
+   		(subclass robotAbleTo antysimmetricRelation)
+     
+   
+   (subclass deviceCanPerform Relation)
+   		(subclass deviceCanPerform antysimmetricRelation)
+     
+      (subclass robotCanPerform deviceCanPerform)
+     
+
+   (subclass formedBy Relation)
+
+     
+   
+   (subclass canSense Relation)
+   	(subclass canSense antysimmetricRelation)
+     
+      (subclass robotCanSense canSense)
+     
+   (subclass attachedTo simmetricRelation)
+   (subclass attachedTo spatialRelation)
+   
+      (subclass connectedTo attachedTo) 
+     
+         (subclass peripheralTo connectedTo) 
+         (subclass peripheralTo contentBearingRelation)
+     
+
+
+;;SKILLS
+
+
+
+
+
+   (subclass robotSkill Skill)
+   (documentation robotSkill EnglishLanguage "Any action that a &%Robot can perform by it's own decision in order to complete a task.")
+      (forall (?rob ?skl)
+            (=> 
+               (and
+                  (instance ?rob Robot)
+                  (instance ?skl robotSkill)
+                  (robotAbleTo ?rob ?skl)
+               )
+               (exists (?mot)
+                  (and
+                     (instance ?mot processingSystem)
+                     (instance ?ek electricSystem)
+                     (connectedTo ?ek ?mot)
+                     (robotPart ?mot ?rob)
+                  )
+               )
+            )
+         )
+   (subclass robotMotion robotSkill)   
+   (documentation robotMotion EnglishLanguage "Any &%robotSkill that involves the movement of a &%robotPart.")
+         (forall (?rob ?skl)
+            (=> 
+               (and
+                  (instance ?rob Robot)
+                  (instance ?skl robotMotion)
+                  (robotAbleTo ?rob ?skl)
+               )
+               (exists (?mot)
+                  (and
+                     (instance ?mot actuatorSystem)
+                     (instance ?ek electricSystem)
+                     (connectedTo ?ek ?mot)
+                     (robotPart ?mot ?rob)
+                  )
+               )
+            )
+         )
+                   
+   (subclass robotManipulate robotMotion)
+   (documentation robotManipulate EnglishLanguage "Any &%robotMotion in which the &%Robot changes the properties of some external &%Object.")
+      (subclass robotGrip robotManipulate)
+      (documentation robotGrip EnglishLanguage "Any &%robotManipulate in which the &%Robot  holds an external &%Object, making the object's &%Location dependant on the &%robotPart that is being used to &%robotGrip.")
+
+      
+        (subclass robotGrab robotGrip)
+        (documentation robotGrab EnglishLanguage "Any &%robotGrip in which the &%Object is being translocated with the &%robotPart that is grabbing it.	")
+
+
+        (forall (?rob ?skl)
+            (=> 
+               (and
+                  (instance ?rob Robot)
+                  (instance ?skl robotGrab)
+                  (robotAbleTo ?rob ?skl)
+               )
+               (exists (?hand1  ?arm1 )
+                  (and
+                        (instance ?hand1 robotHand)
+                        (instance ?act actuatorSystem)
+                        (instance ?arm1 robotArm)
+                        (part ?act ?arm1)
+                        (articulatedTo ?hand1 ?arm1)
+                  )
+               )
+            )
+         )
+
+      
+   
+
+
+   (subclass robotPoseChange robotMotion)
+   (documentation robotPoseChange EnglishLanguage "Any &%robotMotion that finish with the robot's &%pose different that at it's begining.")
+      (instance robotDodge robotPoseChange)
+      (documentation robotDodge EnglishLanguage "Any &%robotPoseChange mean to avoid a collision with another &%Object.")
+   (subclass robotTranslocation robotMotion)
+   	(documentation robotTranslocation EnglishLanguage "Any &%robotMotion meant to change the location of the &%Robot.")
+      (subclass robotGroundTranslocation robotTranslocation)
+      (documentation robotGroundTranslocation EnglishLanguage "Any &%robotTranslocation performed in contact with the ground.")
+               (subclass robotCrawl robotGroundTranslocation)
+               (documentation robotCrawl EnglishLanguage "Any &%robotGroundTranslocation in which the &%Robot drags it's &%robotTrunk over the ground.")
+               (subclass robotWheelTranslocation robotGroundTranslocation)
+               (documentation robotWheelTranslocation EnglishLanguage "Any &%robotGroundTranslocation in which the &%Robot uses a &%Wheel as a &%translocationSystem")
+               (subclass robotRoll robotGroundTranslocation)
+                  (documentation robotRoll EnglishLanguage "Any &%robotGroundTranslocation in which the &%Robot rolls over its trunk in order to translocate.")
+               (subclass robotAmbulation robotGroundTranslocation)
+               	(documentation robotAmbulation EnglishLanguage "Any &%robotGroundTranslocation in which the &%Robot is using at least two &%robotLeg  as its &%translocationSystem.")
+               
+                  (forall (?rbt ?skl)
+                        (=>
+                           (and
+                              (instance ?rbt Robot) 
+                              (instance ?skl robotAmbulation)
+                              (robotAbleTo ?rbt ?skl)
+                           )
+                           (exists (?rbtFt1 ?rbtFt2 ?rbtLg1 ?rbtLg2 ?trnk ?jnt ?jnt2 ?acts)
+                              (and
+                                    (instance ?rbtFt1 robotFeet)
+                                    (instance ?rbtFt2 robotFeet)
+                                    (instance ?jnt robotJoint)
+                                    (instance ?jnt2 robotJoint)
+                                    (instance ?acts actuatorSystem)
+                                    (instance ?rbtLg1 robotLeg)
+                                    (instance ?rbtLg2 robotLeg)
+                                    (instance ?trnk robotTrunk)
+                                    (articulatedTo ?rbtLg1 ?jnt)
+                                    (articulatedTo ?rbtLg2 ?jnt2)
+                                    (articulatedTo ?rbtFt1 ?jnt)
+                                    (articulatedTo ?rbtFt2 ?jnt2)
+                                    (part ?acts ?rbtLg1)
+                                    (part ?acts ?rbtLg2)
+                              )
+                           )
+                        )
+                     )   
+
+                  (subclass robotWalk robotAmbulation)
+                  (documentation robotWalk EnglishLanguage "Any &%robotAmbulation in which at least one leg is in contact with the ground in every moment.")
+                  (subclass robotRun robotAmbulation)
+                  (documentation robotRun EnglishLanguage "Any &%robotAmbulation in which all legs loose contact with the ground in some moment.")
+
+               (subclass robotStairMovement robotGroundTranslocation)
+               	(documentation robotStairMovement EnglishLanguage "Any &%robotGroundTranslocation in which the &%Robot translocates over a stair.")
+
+            (subclass robotAquaticTranslocation robotTranslocation)
+            	(documentation robotAquaticTranslocation EnglishLanguage "Any &%robotTranslocation performed in a &%aquaticArea")
+               (subclass robotDiving robotAquaticTranslocation)
+               	(documentation robotDiving EnglishLanguage "Any &%robotAquaticTranslocation performed bellow the surface of the water.")
+               (subclass robotSwimming robotAquaticTranslocation)
+               	(documentation robotSwimming EnglishLanguage "Any &%robotAquaticTranslocation performed over the surface of the water")
+               (subclass robotAquaticBottomTranslocation robotAquaticTranslocation)
+               (documentation robotAquaticBottomTranslocation "Any type of &%robotGroundTranslocation performed bellow an &%aquaticArea in contact with the ground.")
+               (subclass robotAquaticBottomTranslocation robotGroundTranslocation)
+         
+            (subclass robotActionTranslocation robotTranslocation)
+            (documentation robotActionTranslocation EnglishLanguage "Any type of &%robotTranslocation in which the &%Robot is performing other task at the time.")
+               (instance robotJump robotTranslocation)
+
+               (subclass robotImpel robotActionTranslocation)
+               (documentation robotImpel EnglishLanguage "Any type of &%robotActionTranslocation that involves the movement of another &%Oject by impelling it.")
+               (subclass robotCarry robotActionTranslocation)
+               (documentation robotCarry EnglishLanguage "Any type of &%robotActionTranslocation in which the &%Robot is moving another &%Object by holding or supporting it.")
+               (subclass robotObstacleAvoid robotActionTranslocation)
+               (documentation robotObstacleAvoid EnglishLanguage "Any type of &%robotActionTranslocation in which the &%Robot is able to sense an &%Object and adapt the trajectory to avoid it.")
+               (subclass robotLineTrack robotActionTranslocation)
+        		(documentation robotLineTrack EnglishLanguage "Any type of &%robotActionTranslocation in which the &%Robot is following an external trajectory") 
+
+
+
+
+
+         (subclass robotSense robotSkill)
+         (documentation robotSense EnglishLanguage "Any type of &%robotSkill that involves the analysys of the environment in which the robot is operating." )
+               (forall (?rob ?sns)
+                  (=>
+                     (and
+                        (instance ?rob Robot)
+                        (instance ?sns robotSense)
+                        (robotAbleTo ?rob ?sns)
+                     )
+                     (exists (?snsDev )
+                        (and
+                           (instance ?sns sensingDevice)
+                           (robotPart ?sns ?rob)
+                        )   
+                     )
+                  )
+               )
+           (subclass robotVision robotSense)
+           (documentation robotVision EnglishLanguage "Any type of &%robotSense in which the &%Robot extracts visual information of the environment.")
+               		(forall (?rob ?vs)
+               			(=>
+               				(and
+               					(instance ?rob Robot)
+               					(instance ?vs robotVision)
+               				)
+               				(exists(?cm)
+               					(and
+               						(instance ?cm Camera)
+               						(robotPart ?cm ?rob)
+               					)
+
+               				)
+                                                        ) 
+                                        )
+      (subclass robotComunication robotSkill)
+      (documentation robotComunication EnglishLanguage "Any kind of &%robotSkill that involves &%Information to be emited or received by the &%Robot.")
+               (forall (?rob ?com)
+                  (=>
+                     (and
+                        (instance ?rob Robot)
+                        (instance ?com robotComunicate)
+                        (robotAbleTo ?rob ?com)
+                     )
+                     (and
+                        (instance ?comDev comunicatingDevice)
+                        (robotPart ?comDev ?rob)
+                     )
+                  )
+               )
+
+		(subclass robotHumanLanguageComunication robotComunication)
+		(documentation robotHumanLanguageComunication EnglishLanguage "Any &%robotSkill that involves the &%robotComunication with a &%Human being")
+               (forall (?rob ?com)
+                  (=>
+                     (and
+                        (instance ?rob Robot)
+                        (instance ?com robotHumanLanguageComunication)
+                        (robotAbleTo ?rob ?com)
+                     )
+                     (and
+                        (instance ?mcr Microphone)
+                        (instance ?spk loudSpeaker)
+                        (robotPart ?mcr ?rob)
+                        (robotPart ?spk ?rob)  
+                     )
+                  )
+               )
+
+                                                                                                                                       
+
+
+
+
+
+
+
+
+
+
+;DEVICE
+
+(subclass robotJoint Device)
+      (forall (?rJ)
+         (=>
+            (instance ?rJ robotJoint)
+            (exists (?dev1 ?dev2)
+               (and
+                  (instance ?dev1 Device)
+                  (instance ?dev2 Device)
+                  (articulatedTo ?dev1 ?dev2)
+                  (connectedTo ?dev1 ?rJ)
+                  (connectedTo ?dev2 ?rJ)
+               )
+            )
+         )
+      )
+
+
+(subclass endEffector Device)
+       (forall (?ndFctr)
+          (=>
+             (instance ?ndFctr endEffector)
+             (and
+                (exists (?rbtLmb ?robot ?Action)
+                   (and 
+                      (instance ?rbtLmb robotLimb)
+                      (part ?ndFctr ?rbtLmb)
+                     (instance ?robot Robot)
+                      (robotPart ?rbtLmb ?robot)
+                      (instance ?Action Process)
+                      (deviceCanPerform ?ndFctr ?Action )
+                      (robotAbleToPerform ?robot ?Action)
+                   )
+                )
+             )
+          )
+       )
+
+(subclass robotGripper endEffector)
+       (subclass mechanicalGripper robotGripper)
+       (subclass robotHand mechanicalGripper)
+       (subclass magneticGripper robotGripper)
+       (subclass pneumaticGripper robotGripper)
+       (subclass hydraulicGripper robotGripper)
+       (subclass robotFeet endEffector)
+       (forall (?rob ?foot)
+          (=>
+             (and 
+                (instance ?rob Robot)
+                (instance ?foot robotFoot)
+                (part ?foot ?rob) 
+             )
+            (exists (?stb)
+               (and
+                  (instance ?stb robotStabilize)   
+                   (robotAbleTo ?rob ?stb)
+               )
+             )
+          )
+      )
+       
+       (subclass robotStructuralPart Device)
+
+
+
+          (subclass robotHead robotStructuralPart )
+             (forall (?head)
+                (=> 
+                   (instance ?head robotHead)
+                   (exists (?trnk ?rob)
+                      (and
+                         (instance ?trnk robotTrunk)
+                         (instance ?rob Robot)
+                         (connectedTo ?head ?trnk)
+                         (robotPart ?head ?rob)
+                         (robotPart ?trnk ?rob)
+                      )
+                   )
+                )
+             )
+
+         (subclass robotTrunk robotStructuralPart)
+         (forall (?trnk)
+             (=> 
+                (instance ?trnk robotTrunk)
+                (exists (?rob)
+                   (and
+                      (instance ?rob Robot)
+                      (robotPart ?trnk ?rob)
+                   )
+                )
+             )
+          )
+       
+          (subclass robotLimb robotStructuralPart)
+             (subclass robotTail robotLimb)
+             (forall (?dev)
+                (=>
+                   (instance ?dev robotTail)
+                  (exists (?art)
+                  (and
+                  (instance ?art isArticulated)
+                   (hasAtribute ?dev ?art)
+                  )
+                  )
+                )
+             )
+            (subclass robotLeg robotLimb)
+               (forall (?leg)
+                  (=> 
+                     (instance ?leg robotLeg)
+                     (exists (?sys ?rob ?endEf ?trunk)
+                        (and
+                           (instance ?sys actuatorSystem)
+                           (instance ?endEf endEffector)
+                           (instance ?trunk robotTrunk)
+                           (instance ?rob Robot)
+                           (part  ?sys ?leg)                     
+                           (part ?endEf ?leg)
+                           (connectedTo ?leg ?trunk)
+                           (robotPart ?leg ?rob)
+                            (robotPart ?trunk ?rob)
+                        )
+                     )
+                  )
+               )
+         
+            (subclass robotArm robotLimb)
+               (forall (?arm)
+                  (=> 
+                     (instance ?arm robotArm)
+                     (exists (?sys ?endEf ?rob ?trunk)
+                        (and
+                           (instance ?sys actuatorSystem)
+                           (instance ?endEf endEffector)
+                           (instance ?trunk robotTrunk)
+                           (instance ?rob Robot)
+                           (part ?endEf ?arm)
+                           (part    ?sys ?arm)
+                           (connectedTo ?arm ?trunk)
+                           (robotPart ?arm ?rob)
+                           (robotPart ?trunk ?rob)
+                        )
+                     )
+                  )
+               )
+
+
+   (subclass sensingDevice Device)
+   (subclass locationSensor sensingDevice)
+      (subclass positionSensor locationSensor)
+         (subclass linearPositionSensor positionSensor)
+         (subclass angularPositionSensor positionSensor)
+      (subclass orientationSensor locationSensor)
+         (subclass Gyroscope orientationSensor)
+   (subclass proximitySensor sensingDevice)
+      (subclass usProximitySensor proximitySensor)
+      (subclass irProximitySensor proximitySensor)
+      (subclass laserScanner proximitySensor)
+   (subclass movementSensor sensingDevice)
+      (subclass inertialMovementUnit movementSensor)
+         (formedBy inertialMovementUnit Accelerometer)
+         (formedBy inertialMovementUnit Gyroscope)
+      (subclass Accelerometer movementSensor)
+   (subclass visualSensor sensingDevice)
+      (subclass Camera visualSensor)
+         (subclass videoCamara Camera)
+   (subclass lightSensor sensingDevice)
+      (subclass Photoresistor lightSensor)
+      (subclass irLightSensor lightSensor)
+
+   (subclass soundSensor sensingDevice)
+   
+   (subclass forceSensor sensingDevice)
+
+   (subclass Actuator Device)
+   (subclass electricActuator Actuator)
+      (subclass electricMotor electricActuator)
+         (subclass stepperMotor electricMotor)
+         (subclass continuousMotor electricMotor)
+            (subclass ACcontinuousMotor continuousMotor)
+            (subclass DCcontinuousMotor continuousMotor)
+         (subclass servoMotor electricMotor)
+   (subclass pneumaticActuator Actuator)
+      (subclass pneumaticCylinder pneumaticActuator)
+      (subclass vacuumGenerator pneumaticActuator)
+      (subclass pneumaticGripper pneumaticActuator)
+   (subclass hydraulicActuator Actuator)
+      (subclass hydraulicCylinder hydraulicActuator)
+   (subclass mechanicalActuator Actuator)
+
+   (subclass actuatorSystem Device)
+	   (forall (?asy)
+	      (=>
+	         (instance ?asy actuatorSystem)
+	         (exists (?act)
+	            (and
+	               (instance ?act Actuator)
+	               (formedBy ?asy ?act)
+	            )
+	         )
+	      )
+	   )
+   (subclass processingSystem Device)
+	   (forall (?asy)
+	      (=>
+	         (instance ?asy processingSystem)
+	         (exists (?act)
+	            (and
+	               (instance ?act processingDevice)
+	               (formedBy ?asy ?act)
+	            )
+	         )
+	      )
+	   )
+	(subclass electricSystem Device)
+		(forall (?asy)
+		      (=>
+		         (instance ?asy electricSystem)
+		         (exists (?act)
+		            (and
+		               (instance ?act electricDevice)
+		               (formedBy ?asy ?act)
+		            )
+		         )
+		      )
+		   )
+	
+
+
+   
+   
+
+
+
+   (subclass electricDevice Device)
+      (subclass electricComponent electricDevice)
+         (subclass passiveComponent electricComponent)
+         (subclass activeComponent electricComponent)
+
+
+
+   (subclass electronicDevice electricDevice)   
+   (subclass processingDevice electronicDevice)
+
+      (subclass Computer processingDevice)
+         (forall (?comp)
+            (=> 
+               (instance ?comp Computer)
+               (exists (?cp ?dev ?mem) 
+                  (and
+                     (instance ?cp CPU)
+                     (instance ?dev Device)
+                     (instance ?mem electronicMemory)
+                     (part ?mem ?comp)
+                     (part ?cp ?comp)
+                     (peripheralTo ?dev ?comp)
+                  )
+               )
+            )
+         )
+      (subclass CPU processingDevice)
+         (forall (?cpu)
+            (=>
+               (instance ?cpu CPU)
+               (exists (?cu ?al ?mem ?dev1 )
+                  (and
+                     (instance ?cu controlUnit)
+                     (instance ?dev1 Device)
+                     (instance ?al ALU)
+                     (instance ?mem electronicMemory)
+                     (part ?mem ?cpu)
+                     (part ?al ?cpu)
+                     (part ?cu ?cpu)
+                     (peripheralTo ?dev1 ?cpu)
+                  )
+               )
+            )
+         )
+      (subclass controlUnit processingDevice)
+      (subclass ALU processingDevice)
+      (subclass storageDevice electronicDevice)
+         (subclass electronicMemory storageDevice)
+            
+            
+(subclass comunicatingDevice Device)
+
+
+   (subclass Transmitter comunicatingDevice)
+      (forall (?trns)
+         (=> 
+            (instance ?trns Transmitter)
+            (exists (?trnsmtr)
+               (and
+                  (instance ?trnsmtr Transmit)
+                  (deviceCanPerform ?trns ?trnsmtr)
+               )
+            )
+         )
+      )
+      (subclass radioTransmitter Transmitter)
+         (forall (?rdT)
+            (=>
+               (instance ?rdT radioTransmitter)
+               (exists(?ntn)
+                  (instance ?ntn Antenna)
+                  (part ?ntn ?rdT)
+               )
+            )
+         )
+      (subclass Speaker Transmitter)
+         
+
+
+      	(forall (?dev)
+      		(=>
+      			(instance ?dev sensingDevice)
+      			(exists (?stim)
+      				(and
+      					(instance ?stim Physical)
+      					(canSense ?dev ?stim)
+      				)
+      			)
+      		)
+      	)
+
+
+
+
+
+
+         (forall (?rob ?stim )   
+            (=> 
+               (and
+                  (instance ?rob Robot)
+                  (instance ?stim Physical)
+                  (robotSense ?rob ?stim)
+               )
+               (exists (?dev1 ?rprt)
+                  (and
+                     (instance ?dev1 sensingDevice)
+                     (instance ?rprt Device)
+                     (canSense ?dev1 ?stim)
+                     (part ?dev1 ?rprt)
+                     (robotPart ?rprt ?rob)
+                  )
+               )
+            )
+         )
+   (subclass Receiver comunicatingDevice)
+      (forall (?rcvr)
+            (=> 
+               (instance ?rcvr Receiver)
+               (exists (?rcvAct)
+                  (and
+                     (instance ?rcvAct Receive)
+                     (deviceCanPerform ?rcvr ?rcvAct)
+                  )
+               )
+            )
+      )
+      (subclass radioReceiver Receiver)
+         (forall (?rdR)
+            (=>
+               (instance ?rdR radioReceiver)
+               (exists(?ntn)
+                  (instance ?ntn Antenna)
+                  (part ?ntn ?rdR)
+               )
+            )
+         )
+      
+      (subclass Microphone Receiver)
+
+   (subclass Transceiver Transmitter)
+
+
+
+
+
+
+
+
+
+
