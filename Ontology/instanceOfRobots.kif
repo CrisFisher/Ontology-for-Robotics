@@ -1,0 +1,649 @@
+	(instance ?zeno humanoidRobot)
+		(instance ?zenoTrunk robotTrunk)
+		(attribute ?zenoTrunk isArticulated)
+			)
+			(instance ?microphoneSystem sensingSystem)
+				(formedBy ?microphoneSystem Microphone)
+			(part ?microphoneSystem ?zenoTrunk)
+			(instance ?touchScreen sensingSystem)
+				(formedBy ?touchScreen forceSensor)
+			(part ?touchScreen ?zenoTrunk)
+			(instance ?waistSensor proximitySensor)
+			(part ?waistSensor ?zenoTrunk)
+		(robotPart ?zenoTrunk ?zeno)
+
+		(instance ?zenoHead robotHead)
+			(instance ?zenoFace robotFace)
+				(instance ?zenoLeftEye robotEye)
+					(part ?zenoLeftEye zenoFace)
+				(instance ?zenoLeftEyeLid robotEyeLid)
+					(part ?zenoLeftEyeLid zenoFace)
+				(instance ?zenoMouth robotMouth)
+					(part ?zenoMouth zenoFace)
+				(instance ?zenoRightEye robotEye)
+					(part ?zenoRightEye zenoFace)
+				(instance ?zenoRightEyeLid robotEyeLid)
+					(part ?zenoRightEyeLid zenoFace)
+				(instance ?zenoForehead robotForehead)
+					(part ?zenoForehead zenoFace)
+			(peripheralTo ?zenoFace ?zenoHead)
+			(part ?zenoFace ?zenoHead)
+
+			(instance ?zenoComputer Computer)
+			(part ?zenoComputer ?zenoHead)
+			(forall (?per)
+				(=>
+					(peripheralTo ?per ?zenoComputer)
+					(and 
+						(connectedTo ?per ?zenoBus)
+						(or
+							(and
+								(Transmit ?zenoComputer ?zenoBus)
+								(Receive ?per ?zenoBus)
+							)
+							(and
+								(Transmit ?per ?zenoBus)
+								(Receive ?zenoComputer ?zenoBus)
+							)
+						)
+					)
+				)
+			)
+
+		(articulatedTo ?zenoHead ?zenoTrunk)
+
+		(instance ?zenoLeftArm robotArm)
+			(instance ?zenoLeftArmActuatorSystem actuatorSystem)
+			(formedBy ?zenoLeftArmActuatorSystem electricMotor)
+			(peripheralTo ?zenoLeftArmActuatorSystem ?zenoComputer)
+			(part ?zenoLeftArmActuatorSystem ?zenoLeftArm)
+			(instance ?zenoLeftHand robotHand)
+			(peripheralTo ?zenoLeftHand ?zenoComputer)
+			(part ?zenoLeftHand ?zenoLeftArm)
+		(articulatedTo ?zenoLeftArm ?zenoTrunk)
+		(robotPart ?zenoLeftArm ?zeno)
+
+
+		(instance ?zenoRightArm robotArm)
+			(instance ?zenoRightArmActuatorSystem actuatorSystem)
+			(formedBy ?zenoRightArmActuatorSystem electricMotor)
+			(peripheralTo ?zenoRightArmActuatorSystem ?zenoComputer)
+			(part ?zenoRightArmActuatorSystem ?zenoRightArm)
+			(instance ?zenoRightHand robotHand)
+			(peripheralTo ?zenoRightHand ?zenoComputer)
+			(part ?zenoRightHand ?zenoRightArm)
+		(articulatedTo ?zenoRightArm ?zenoTrunk)
+		(robotPart ?zenoRightArm ?zeno)
+
+
+		(instance ?zenoLeftLeg robotLeg)
+			(instance ?zenoLeftLegActuatorSystem actuatorSystem)
+			(formedBy ?zenoLeftLegActuatorSystem electricMotor
+			(peripheralTo ?zenoLeftLegActuatorSystem ?zenoComputer)
+			(part ?zenoLeftLegActuatorSystem ?zenoLeftLeg)
+
+			(instance ?zenoLeftFoot robotFoot)
+				(instance ?zenoLeftDistanceSensor irProximitySensor)
+				(part ?zenoLeftDistanceSensor ?zenoLeftFoot)
+				(peripheralTo ?zenoLeftDistanceSensor ?zenoComputer)
+			(part ?zenoLeftFoot ?zenoLeftLeg)
+		(articulatedTo ?zenoLeftLeg ?zenoTrunk)
+		(part ?zenoLeftLeg ?zeno)
+
+
+		(instance ?zenoRightLeg robotLeg)
+			(instance ?zenoRightLegActuatorSystem actuatorSystem)
+			(formedBy ?zenoRightLegActuatorSystem electricMotor
+			(peripheralTo ?zenoRightLegActuatorSystem ?zenoComputer)
+			(part ?zenoRightLegActuatorSystem ?zenoRightLeg)
+
+			(instance ?zenoRightFoot robotFoot)
+				(instance ?zenoRightDistanceSensor irProximitySensor)
+				(part ?zenoRightDistanceSensor ?zenoRightFoot)
+				(peripheralTo ?zenoRightDistanceSensor ?zenoComputer)
+			(part ?zenoRightFoot ?zenoRightLeg)
+		(articulatedTo ?zenoRightLeg ?zenoTrunk)
+		(part ?zenoRightLeg ?zeno)
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+		(instance ?asimo humanoidRobot)
+
+	(instance ?asRightArm robotArm)
+		
+		(instance ?asRightActuatorSystem actuatorSytem)
+			(formedBy ?asRightActuatorSystem actuatorSytem)
+		(part ?asRightActuatorSystem ?asRightArm)
+
+		(instance ?asRightHand robotHand)
+			(instance ?asRightForceSensor forceSensor)
+			(peripheralTo ?asRightForceSensor ?asComputer)
+			part ?asRightForceSensor ?asRightHand)
+		(instance ?asRightHand ?asRightArm)
+
+	(articulatedTo ?asRightArm ?asTrunk)
+	(robotPart ?asRightArm ?asimo)
+
+	(instance ?asLeftArm robotArm)
+		
+		(instance ?asLeftActuatorSystem actuatorSytem)
+			(formedBy ?asLeftActuatorSystem actuatorSytem)
+		(part ?asLeftActuatorSystem ?asLeftArm)
+
+		(instance ?asLeftHand robotHand)
+			(instance ?asLeftForceSensor forceSensor)
+			(peripheralTo ?asLeftForceSensor ?asComputer)
+			part ?asLeftForceSensor ?asLeftHand)
+		(instance ?asLeftHand ?asLeftArm)
+
+	(articulatedTo ?asLeftArm ?asTrunk)
+	(robotPart ?asLeftArm ?asimo
+
+	(instance ?asRightLeg robotLeg)
+		(instance ?asRightLegActuatorSystem actuatorSytem)
+			(formedBy ?asRightLegActuatorSystem electricMotor)
+			(peripheralTo ?asRightLegActuatorSystem ?asComputer)
+		(part ?asRightLegActuatorSystem ?asRightLeg)
+
+		(instance ?asRightFoot robotFoot)
+			(instance ?asRightForceSensor forceSensor)
+			(peripheralTo ?asRightForceSensor ?asComputer)
+		(part ?asRightFoot ?asRightLeg)
+
+	(articulatedTo ?asRightLeg ?asTrunk)
+	(robotPart ?asRightLeg ?asimo)
+
+	(instance ?asLeftLeg robotLeg)
+		(instance ?asLeftLegActuatorSystem actuatorSytem)
+			(formedBy ?asLeftLegActuatorSystem electricMotor)
+			(peripheralTo ?asLeftLegActuatorSystem ?asComputer)
+		(part ?asLeftLegActuatorSystem ?asLeftLeg)
+
+		(instance ?asLeftFoot robotFoot)
+			(instance ?asLeftForceSensor forceSensor)
+			(peripheralTo ?asLeftForceSensor ?asComputer)
+		(part ?asLeftFoot ?asLeftLeg)
+
+	(articulatedTo ?asLeftLeg ?asTrunk)
+	(robotPart ?asLeftLeg ?asimo)
+
+
+	(instance ?asTrunk robotTrunk)
+			(instance ?asIMU IMU)
+				(peripheralTo ?asIMU ?asComputer)
+				(part ?asIMU ?asTrunk)
+			(instance ?asUSSensor usProximitySensor)
+				(peripheralTo ?asUSSensor ?asComputer)
+			(instance ?asRadioTransceiver radioTransceiver)
+				(part ?asRadioTransceiver ?asTrunk)
+				(peripheralTo ?asRadioTransceiver ?asComputer)
+			(instance ?asBattery Battery)
+				(part ?asBattery ?asTrunk)
+				(supplyEnergyTo ?asBattery ?asimo)
+
+
+	(instance ?asHead robotHead)
+	(articulatedTo ?asHead ?asTrunk)
+	(robotPart ?asHead ?asimo)
+		(instance ?asComputer Computer)
+		(instance ?asRightEye robotEye)
+			(peripheralTo ?asRightEye ?asComputer)
+		(instance ?asLeftEye robotEye)
+			(peripheralTo ?asLeftEye ?asComputer)
+		(instance ?asMicrophone Microphone)
+			(peripheralTo ?asMicrophone ?asComputer)
+
+		(instance ?asBus comunicationChanel)
+		(instance ?asBus Device)
+		(robotPart ?asBus ?asimo)
+
+	(forall (?rob)
+		(=> 
+			(and
+				(instance ?rob Robot)
+				(equal (?rob ?asimo))
+			)
+			(and
+				(robotAbleTo ?rob robotCarry)
+				(robotAbleTo ?rob robotGrab)
+				(robotAbleTo ?rob robotTranslocation)
+				(robotAbleTo ?rob robotSoundSense)
+				(robotAbleTo ?rob robotVision)
+				(robotAbleTo ?rob robotVisualSense)
+				(robotAbleTo ?rob robotStabilize)
+				(robotAbleTo ?rob robotWalk)
+				(robotAbleTo ?rob robotMotion)
+				(robotAbleTo ?rob robotGrab)
+			)
+		)
+	)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(instance ?asimo humanoidRobot)
+
+		(instance ?asRightArm robotArm)
+			(articulatedTo ?asRightArm ?asTrunk)
+			(instance ?asRightActuatorSystem actuatorSystem)
+				(formedBy ?asRightActuatorSystem electricMotor)
+					(=>
+						(formedBy?asRightActuatorSystem electricMotor)
+						(exists (?mot)
+							(and
+								(instance ?mot electricMotor)
+								(part ?mot ?asRightActuatorSystem)
+							)
+						)
+					)
+			(part ?asRightActuatorSystem ?asRightArm)
+			(instance ?asRightHand robotHand)
+				(instance  ?asRightForceSensor forceSensor)
+				(peripheralTo ?asRightForceSensor ?asComputer)
+				(=>
+					(peripheralTo ?asRightActuatorSystem ?asComputer)
+					(or
+						(and
+							(Transmit ?asRightActuatorSystem ?asBus)
+							(Receive ?asComputer ?asBus)
+						)
+						(and 
+							(Transmit ?asComputer ?asBus)
+							(Receive ?asRightActuatorSystem ?asBus)
+						)
+					)
+				)
+				(part ?asRightForceSensor ?asRightHand)
+			(part ?asRightHand ?asRightArm)
+		(connectedTo ?asRightArm ?asTrunk)
+		(robotPart ?asRightArm ?asimo)
+			(=>
+				(and
+					(part ?asRightArm ?asimo)
+					(part ?asRightActuatorSystem ?asRightArm)
+				)
+				(robotAbleTo ?asimo robotMotion)
+			)
+			(=>
+				(and
+					(part ?asRightArm ?asimo)
+					(part ?asRightActuatorSystem ?asRightArm)
+					(part ?asRightHand ?asRightArm)
+				)
+				(robotAbleTo ?asimo robotMotion)
+				(robotAbleTo ?asimo robotGrab)
+			)
+		
+
+		(instance ?asLeftArm robotArm)
+			(instance ?asLeftActuatorSystem actuatorSystem)
+				(formedBy ?asLeftActuatorSystem ?electricMotor)
+				(peripheralTo ?asLeftActuatorSystem ?asComputer)
+				(=>
+					(peripheralTo ?asLeftActuatorSystem ?asComputer)
+					(or
+						(and
+							(Transmit ?asLeftActuatorSystem ?asBus)
+							(Receive ?asComputer ?asBus)
+						)
+						(and 
+							(Transmit ?asComputer ?asBus)
+							(Receive ?asLeftActuatorSystem ?asBus)
+						)
+					)
+				)
+			(part ?asLeftActuatorSystem ?asLeftArm)
+			(instance ?asLeftHand robotHand)
+				(instance  ?asLeftForceSensor forceSensor)
+				(connectedTo ?asLeftForceSensor ?asBus)
+					(peripheralTo ?asLeftForceSensor ?asComputer)
+				(part ?asLeftForceSensor ?asLeftHand)
+			(part ?asLeftHand ?asLeftArm)
+		(connectedTo ?asLeftArm ?asTrunk)
+		(robotPart ?asLeftArm ?asimo)
+			(=>
+				(and
+					(part ?asLeftArm ?asimo)
+					(part ?asLeftActuatorSystem ?asLeftArm)
+				)
+				(robotAbleTo ?asimo ?robotMotion)
+			)
+			(=>
+				(and
+					(part ?asLeftArm ?asimo)
+					(part ?asLeftActuatorSystem ?asLeftArm)
+					(part ?asLeftHand ?asLeftArm)
+				)
+				(robotAbleTo ?asimo robotMotion)
+				(robotAbleTo ?asimo robotGrab)
+			)
+		
+		(instance ?asRightLeg robotLeg)
+		(connectedTo ?asRightLeg ?asTrunk)
+		(robotPart ?asRightLeg ?asimo)
+			(instance ?asRightLegActuatorSystem actuatorSystem)
+				(formedBy ?asRightLegActuatorSystem electricMotor)
+				(=>
+					(formedBy ?asRightLegActuatorSystem electricMotor)
+					(exists (?mot)
+						(instance ?mot electricMotor)
+						(part ?mot ?asRightLegActuatorSystem)
+					)
+				)
+				(peripheralTo ?asRightLegActuatorSystem ?asComputer)
+				(=>
+					(peripheralTo ?asRightLegActuatorSystem ?asComputer)
+					())
+			(part ?asRightLegActuatorSystem ?asRightLeg)
+			(instance ?asRightFoot robotFoot)
+				(instance  ?asRightForceSensor forceSensor)
+				(peripheralTo ?asRightForceSensor ?asComputer)
+				(part ?asRightForceSensor ?asRightFoot)
+			(part ?asRightFoot ?asRightLeg)
+			(=>
+				(and
+					(part ?a?sRightLeg ?asimo)
+					(part ?asRightLActuatorSystem ?asRightLeg)
+				)
+				(robotAbleTo ?asimo robotMotion)
+			)
+			(=>
+				(and
+					(part ?asRightLeg ?asimo)
+					(part ?asRightActuatorSystem ?asRightLeg)
+					(part ?asRightFoot ?asRightLeg)
+				)
+				(robotAbleTo ?asimo robotMotion)
+				(robotAbleTo ?asimo robotStabilize)
+			)
+			
+		(instance ?asLeftLeg robotLeg)
+		(connectedTo ?asLeftLeg ?asTrunk)
+				(instance ?asLeftLegActuatorSystem actuatorSystem)
+				(formedBy ?asLeftLegActuatorSystem electricMotor)
+				(peripheralTo ?asLeftLegActuatorSystem ?asComputer)
+			(part ?asLeftLegActuatorSystem ?asLeftLeg)
+			(instance ?asLefFoot robotFoot)
+				(instance  ?asLefForceSensor forceSensor)
+				(peripheralTo ?asLeftForceSensor ?asComputer)
+				(part ?asLeftLeftForceSensor ?asLefteftFoot)
+			(part ?asLeftFoot ?asLeftLeg)
+
+		(connectedTo ?asLeftLeg ?asTrunk)
+		(robotPart ?asLeftLeg ?asimo)
+			(=>
+				(and
+					(part ?asLeftLeg ?asimo)
+					(part ?asLeftLegActuatorSystem ?asLeftLeg)
+				)
+				(robotAbleTo ?asimo robotMotion)
+			)
+			(=>
+				(and
+					(part ?asLefLeg ?asimo)
+					(part ?asLeftLegActuatorSystem ?asLeftLeg)
+					(part ?asLeftFoot ?asLeftLeg)
+				)
+				(robotAbleTo ?asimo robotMotion)
+				(robotAbleTo ?asimo robotStabilize)
+			)
+
+			(=>
+				(and
+					(part ?asLeftLeg ?asimo)
+					(part ?asRightLeg ?asimo)
+					(connectedTo ?asLeftLeg ?asTrunk)
+					(connectedTo ?asRightLeg ?asTrunk)
+					(instance ?asimo leggedRobot)
+				)
+				(robotAbleTo ?asimo robotWalk)
+			)
+
+			(=> 
+				(and
+					(part ?asLefteftFoot ?asimo)
+					(part ?asRightightFoot ?asimo)
+				)
+				(robotAbleTo ?asimo robotStabilize)
+			)
+
+			(=>
+				(and
+					(robotAbleTo ?asimo ?robotAmbulate)
+					(robotAbleTo ?asimo ?robotGrab)
+					(part ?asComputer ?asimo)
+				)
+				(robotAbleTo ?asimo ?robotCarry)
+			)
+			
+
+		(instance ?asTrunk robotTrunk)
+			(instance ?asIMU IMU)
+				(peripheralTo ?asIMU ?asComputer)
+				(part ?asIMU ?asTrunk)
+			(instance ?asUSSensor usProximitySensor)
+				(peripheralTo ?asUSSensor ?asComputer)
+			(instance ?asAntenna Antenna)
+				(part ?asAntenna ?AsRadioTransceiver)
+				(peripheralTo ?asAntenna ?asComputer)
+			(instance ?asBattery Battery)
+				(part ?asBattery ?asTrunk)
+				(supplyEnergyTo ?asBattery ?asimo)
+
+
+			
+		(instance ?asHead robotHead)
+		(connectedTo ?asHead ?asTrunk)
+		(robotPart ?asHead ?asimo)
+			(instance ?asComputer Computer)
+			
+			(instance ?asRightEye videoCamera)
+				(peripheralTo ?asRightEye ?asComputer)
+			(instance ?asLeftEye videoCamera)
+				(peripheralTo ?asLeftEye ?asComputer)
+				(=>
+					(or
+						(peripheralTo ?asRightEye ?asComputer)
+						(peripheralTo ?asLeftEye ?asComputer)
+					)
+					(and
+						(robotAbleTo ?asimo robotVision)
+						(robotAbleTo ?asimo robotVisualSense)
+					)
+				)
+
+			(instance ?asMicrophone Microphone)
+				ripheralTo ?asMicrophone ?asComputer)
+				(=>
+					(part ?asMicrophone ?asimo)
+					(robotAbleTo ?asimo robotSoundSense)
+				)
+			
+		(instance ?asBus comunicationChannel)
+		(instance ?asBus Device)
+		(robotPart ?asBus ?asimo)
+			(forall (?dev)
+				(=> 
+					(peripheralTo ?dev ?asComputer)
+					(and
+						(connectedTo ?dev ?asBus)
+						(or 
+							(and
+								(Transmit ?dev ?asBus)
+								(Receive ?asComputer ?asBus)
+							)
+							(and
+								(Receive ?dev ?asBus)
+								(Transmit ?asComputer ?asBus)
+							)
+						)
+					)
+				)
+			)
+
+
+		(=>	
+			(and
+				(robotAbleTo ?asimo  robotTranslocation)
+				(robotAbleTo ?asimo robotGrab)
+				(part ?asComputer ?asimo)
+			)
+			(and
+				(robotAbleTo ?asimo robotCarry)
+		) 
+		
+
+
+
+
+
+
+
+
+
+	(instance ?aibo quadrupedalRobot)
+		(instance ?aiboHead robotHead)
+			(instance ?aiboHeadTouchSensor forceSensor)
+			(part ?aiboHeadTouchSensor ?aiboHead)
+			(instance ?aiboCamera visualSensor) ;;Specified as a imageSensor, not a camera in aibo's features
+			(part ?aiboCamera ?aiboHead)
+			(instance ?aiboMicro Microphone)
+			(part ?aiboMicro ?aiboHead)
+			(instance ?aiboSpeaker loudSpeaker)
+			(part ?aiboSpeaker ?aiboHead)
+			(instance ?aiboChinTouchSensor forceSensor)
+			(part ?aiboChinTouchSensor ?aiboHead)
+			(instance ?aiboEars robotEar)
+			(part ?aiboEars ?aiboHead)
+		(peripheralTo ?aiboHead ?aiboComputer)
+		(articulatedTo ?aiboHead ?aiboTrunk)
+
+		(instance ?aiboTrunk robotTrunk)
+			(instance ?backTouchSensor forceSensor)
+			(part ?backTouchSensor ?aiboTrunk)
+			(instance ?aiboImu IMU)
+			(part ?aiboImu ?aiboTrunk)
+			(instance ?ionBattery Battery)
+			(part ?ionBattery ?aiboTrunk)
+			(instance ?aiboTailLight Led)
+			(part ?aiboTailLight ?aiboTrunk)
+			(instance ?aiboComputer Computer)
+			(part ?aiboComputer ?aiboTrunk)
+
+		(peripheralTo ?aiboTrunk ?aiboComputer)
+		(robotPart ?aiboTrunk ?aibo)
+
+		(instance ?aiboLeftFrontLeg robotLeg)
+			(instance ?aiboLeftFrontActuatorSystem actuatorSystem)
+			(formedBy ?aiboLeftFrontActuatorSystem electricMotor)
+			(peripheralTo ?aiboLeftFrontActuatorSystem ?aiboComputer)
+			(part ?aiboLeftFrontActuatorSystem ?aiboLeftFrontLeg)
+		(articulatedTo ?aiboLeftFrontLeg ?aiboTrunk)
+
+
+		(instance ?aiboRighFrontLeg robotLeg)
+			(instance ?aiboRightFrontActuatorSystem actuatorSystem)
+			(formedBy ?aiboRightFrontActuatorSystem electricMotor)
+			(peripheralTo ?aiboRightFrontActuatorSystem ?aiboComputer)
+			(part ?aiboRightFrontActuatorSystem ?aiboRightFrontLeg)
+		(articulatedTo ?aiboRightFrontLeg ?aiboTrunk)
+
+
+		(instance ?aiboLeftBackLeg robotLeg)
+			(instance ?aiboLeftBackActuatorSystem actuatorSystem)
+			(formedBy ?aiboLeftBackActuatorSystem electricMotor)
+			(peripheralTo ?aiboBackFrontActuatorSystem ?aiboComputer)
+			(part ?aiboBackFrontActuatorSystem ?aiboBackFrontLeg)
+		(articulatedTo ?aiboBackFrontLeg ?aiboTrunk)
+
+
+		(instance ?aiboRightBackLeg robotLeg)
+			(instance ?aiboRightBackActuatorSystem actuatorSystem)
+			(formedBy ?aiboRightBackActuatorSystem electricMotor)
+			(peripheralTo ?aiboRightBackActuatorSystem ?aiboComputer)
+			(part ?aiboRightBackActuatorSystem ?aiboRightBackLeg)
+		(articulatedTo ?aiboRightBackLeg ?aiboTrunk)
+
+
+		(instance ?aiboInterface robotInterface)
+		(=>
+			(forall (?dev)
+				(=>
+					(and
+						;(instance ?dev Device)
+						(peripheralTo ?dev ?aiboComputer)
+						(part ?dev ?aibo)
+					)
+					(and
+						(connectedTo ?aiboBus)
+						(part ?dev ?aiboInterface)
+					)
+				)
+			)
+		)
+
+
+
+
+
+		(instance ?Snape robotSnake)
+
+			(instance ?snapeHead robotHead)
+
+				(instance ?snapeEye camera)
+				(part ?snapeEye ?snapeHead)
+
+				(instance ?snapeBrain Computer)
+				(part ?snapeBrain ?snapeHead)
+				(robotPart ?snapeBrain ?snapeHead)
+
+			(articulatedTo ?snapeHead ?snapeTrunk)
+			(robotPart ?snapeHead ?Snape)
+
+
+			(instance ?snapeTrunk robotTrunk)
+
+				(instance ?snapeSystem sensingSystem)
+				(part ?snapeSystem ?robotTrunk)
+				(peripheralTo ?snapeSystem ?snapeBrain)
+
+				(instance ?snapeSystem sensingSystem)
+				(part ?snapeSystem ?robotTrunk)
+				(peripheralTo ?snapeSystem ?snapeBrain)
+
+			(robotPart ?snapeTrunk ?Snape)
+
+			(instance ?snapeTail robotTail)
+				(instance ?snapeActuatorSystem actuatorSystem)
+				(peripheralTo ?snapeActuatorSystem ?snapeBrain)
+				(part ?snapeActuatorSystem ?snapeTail)
+			(articulatedTo ?snapeTail ?snapeTrunk)
+			(robotpart ?snapeTail ?Snape)
+
+
+			
